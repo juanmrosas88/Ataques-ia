@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src https://raw.githubusercontent.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="dark">
 <title>Cyber Timeline 2025–2026 | SOC Dashboard</title>
@@ -81,6 +81,66 @@ h2.t{margin:0;font-size:18px;line-height:1.3}
 .empty{text-align:center;color:var(--mut);padding:40px 12px;border:1px dashed var(--line);border-radius:12px;font-family:var(--mono)}
 footer{margin-top:36px;color:var(--mut);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
 footer code{font-family:var(--mono);color:var(--green)}
+/* ---- gráfico ---- */
+.chartcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 14px 12px;margin:20px 0 0;display:grid;gap:10px}
+.ct{margin:0;font:700 16px var(--sans)}
+.cs{margin:2px 0 0;color:var(--mut);font-size:12.5px}
+.chartwrap{position:relative;width:100%}
+.chartwrap svg{display:block;width:100%;height:auto;overflow:visible}
+.ax{fill:var(--mut);font:10px var(--mono)}
+.gridl{stroke:var(--line);stroke-width:1}
+.axl{stroke:#35466b;stroke-width:1}
+.bar{fill:rgba(34,211,238,.55)} .bar.now{fill:rgba(34,211,238,.28)}
+.hit{fill:transparent} .hit:hover{fill:rgba(34,211,238,.10)}
+.area{fill:rgba(34,211,238,.14)} .line{fill:none;stroke:var(--cyan);stroke-width:2}
+.stem{stroke-width:1;stroke-dasharray:3 3;opacity:.55}
+.pin{cursor:pointer;outline:none}
+.pin circle{fill:var(--bg);stroke-width:2}
+.pin text{fill:var(--txt);font:700 9.5px var(--mono);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.pin:hover circle,.pin:focus-visible circle{fill:#1d2a49;stroke-width:3}
+.pin.crit circle{stroke:var(--red)} .pin.crit.sel circle{fill:rgba(255,77,109,.25)}
+.pin.high circle{stroke:var(--amber)} .pin.medium circle{stroke:var(--green)}
+.stem.critical{stroke:var(--red)} .stem.high{stroke:var(--amber)} .stem.medium{stroke:var(--green)}
+.out{cursor:pointer;outline:none} .out path{fill:var(--violet);stroke:var(--bg);stroke-width:1.5}
+.out text{fill:var(--violet);font:700 10px var(--mono);text-anchor:middle}
+.out:hover path,.out:focus-visible path{fill:#fff}
+.tip{position:absolute;z-index:5;pointer-events:none;background:#0b1220;border:1px solid var(--cyan);border-radius:8px;padding:6px 9px;font:12px/1.4 var(--sans);max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.tip[hidden]{display:none}
+.pinlist{display:flex;flex-wrap:wrap;gap:6px}
+.pinchip{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;font-size:11.5px}
+.pinchip b{font:700 11px var(--mono);color:var(--red)}
+.pinchip[data-sev="high"] b{color:var(--amber)} .pinchip[data-sev="medium"] b{color:var(--green)}
+/* ---- pestañas ---- */
+.tabs{display:flex;gap:4px;margin:18px 0 14px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{background:none;border:0;border-bottom:2px solid transparent;color:var(--mut);padding:10px 14px;font:700 13px var(--sans);cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--txt)}
+.tab[aria-selected="true"]{color:var(--cyan);border-bottom-color:var(--cyan)}
+.tab:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px}
+.panel[hidden]{display:none}
+.flash .card{box-shadow:0 0 0 2px var(--cyan),0 0 26px rgba(34,211,238,.4)}
+/* ---- tracker CVE ---- */
+.datastat{margin:0 0 6px;color:var(--mut);font:500 12px var(--mono)}
+.datastat .ok{color:var(--green)} .datastat .bad{color:var(--amber)}
+.datastat button{margin-left:8px}
+select.toggle{appearance:auto;color:var(--txt);background:var(--panel)}
+.chk{display:inline-flex;gap:6px;align-items:center;color:var(--mut);font:600 12px var(--mono);cursor:pointer}
+.kitem{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:10px;margin:0 0 8px}
+.kitem[open]{border-color:var(--cyan)}
+.krow{list-style:none;cursor:pointer;display:grid;grid-template-columns:150px 1fr auto auto;gap:6px 12px;align-items:center;padding:10px 12px}
+.krow::-webkit-details-marker{display:none}
+.krow:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px;border-radius:8px}
+.kid{font:700 12.5px var(--mono);color:var(--cyan)}
+.kmain{display:grid;min-width:0} .kmain b{font-size:14px} .kmain small{color:var(--mut);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kdates{display:grid;font:500 11.5px var(--mono);color:var(--mut);text-align:right} .kdue{color:var(--amber)}
+.kbody{padding:0 12px 12px;margin-top:0}
+.morewrap{text-align:center;margin:14px 0}
+/* ---- caídas ---- */
+.ocard{margin:0 0 12px} .o-ok{--c:var(--green)} .o-part{--c:var(--amber)} .o-unv{--c:var(--red)}
+.tag.st-ok{color:var(--green);border-color:rgba(74,222,128,.5);background:rgba(74,222,128,.1)}
+.tag.st-part{color:var(--amber);border-color:rgba(251,191,36,.5);background:rgba(251,191,36,.1)}
+.tag.st-unv{color:var(--red);border-color:rgba(255,77,109,.5);background:rgba(255,77,109,.1)}
+.note{border-left:2px solid var(--amber);padding-left:10px}
+@media(max-width:700px){.krow{grid-template-columns:1fr auto}.kid{grid-column:1/-1}.kdates{text-align:left}}
 @media(max-width:560px){ol.tl{padding-left:22px}li.ev::before{left:-21px}li.year{margin-left:-22px}h2.t{font-size:16.5px}.spacer{display:none}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
@@ -90,9 +150,31 @@ footer code{font-family:var(--mono);color:var(--green)}
   <header class="top">
     <span class="badge"><i class="dot"></i>SOC://THREAT-TIMELINE</span>
     <h1>Cyber Incidents <span>2025–2026</span></h1>
-    <p class="sub">Línea de tiempo interactiva de los incidentes, brechas, vulnerabilidades y campañas de mayor impacto global. Filtra por categoría, severidad y año, o busca por palabra clave.</p>
+    <p class="sub">Línea de tiempo de los incidentes más graves, tracker de CVE explotados activamente y registro de caídas de sistema. Los hackeos críticos se ubican sobre el gráfico: haz clic en un pin para abrir su tarjeta.</p>
   </header>
 
+  <section class="chartcard" aria-label="Gráfico de CVE explotados y hackeos graves">
+    <div>
+      <h2 class="ct">CVE explotados activamente · con los hackeos más graves</h2>
+      <p class="cs">Barras: CVE añadidos al catálogo CISA KEV. Pines numerados: incidentes de la línea de tiempo (clic para abrir). Rombos: caídas de sistema.</p>
+    </div>
+    <div class="row" id="cRange"><span class="lbl">Rango</span></div>
+    <div class="row" id="cMode"><span class="lbl">Vista</span></div>
+    <div class="row" id="cLayers"><span class="lbl">Capas</span></div>
+    <div class="chartwrap" id="chartWrap">
+      <svg id="chart" role="img" aria-label="Gráfico de CVE añadidos al catálogo KEV por período, con incidentes graves y caídas marcados"></svg>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+    <div class="pinlist" id="pinList" aria-label="Incidentes en el gráfico"></div>
+  </section>
+
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <button class="tab" role="tab" type="button" data-tab="timeline" id="t-timeline" aria-controls="p-timeline" aria-selected="true">Incidentes 2025–26</button>
+    <button class="tab" role="tab" type="button" data-tab="cve" id="t-cve" aria-controls="p-cve" aria-selected="false" tabindex="-1">CVE Tracker</button>
+    <button class="tab" role="tab" type="button" data-tab="outages" id="t-outages" aria-controls="p-outages" aria-selected="false" tabindex="-1">Caídas de sistema</button>
+  </nav>
+
+  <div class="panel" id="p-timeline" role="tabpanel" aria-labelledby="t-timeline">
   <section class="stats" id="stats" aria-label="Resumen"></section>
 
   <section class="controls" aria-label="Filtros">
@@ -110,10 +192,46 @@ footer code{font-family:var(--mono);color:var(--green)}
 
   <div class="count" id="count" aria-live="polite"></div>
   <ol class="tl" id="tl"></ol>
+  </div>
+
+  <div class="panel" id="p-cve" role="tabpanel" aria-labelledby="t-cve" hidden>
+    <section class="stats" id="kStats" aria-label="Resumen KEV"></section>
+    <p class="datastat" id="kStatus" aria-live="polite"></p>
+    <section class="controls" aria-label="Filtros del tracker">
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="kq" type="search" placeholder="CVE-2026-…, vendor, producto, palabra clave…" autocomplete="off" aria-label="Buscar CVE">
+      </div>
+      <div class="row" id="kRange"><span class="lbl">Agregadas</span></div>
+      <div class="row">
+        <span class="lbl">Orden</span>
+        <select class="toggle" id="kSort" aria-label="Orden">
+          <option value="d-desc">Más recientes</option>
+          <option value="d-asc">Más antiguas</option>
+          <option value="due-asc">Fecha límite próxima</option>
+          <option value="v-asc">Proveedor (A–Z)</option>
+        </select>
+        <label class="chk"><input type="checkbox" id="kRans"> Solo uso en ransomware</label>
+        <span class="spacer"></span>
+        <button class="toggle" id="kCsv" type="button">Exportar CSV</button>
+      </div>
+    </section>
+    <div class="count" id="kCount" aria-live="polite"></div>
+    <div id="kList"></div>
+    <div class="morewrap"><button class="toggle" id="kMore" type="button">Mostrar más</button></div>
+  </div>
+
+  <div class="panel" id="p-outages" role="tabpanel" aria-labelledby="t-outages" hidden>
+    <p class="sub" style="margin-bottom:10px">Fallos de sistema recientes. Cada entrada lleva una insignia: <b style="color:var(--green)">Confirmado</b> (coincide con las fuentes), <b style="color:var(--amber)">Parcial</b> (el hecho está confirmado pero hay datos que difieren o son preliminares) y <b style="color:var(--red)">No verificado</b> (no pude contrastarlo). Las causas son las informadas por cada organización y pueden cambiar.</p>
+    <section class="controls" aria-label="Filtros de caídas"><div class="row" id="oRow"><span class="lbl">Verificación</span></div></section>
+    <div class="count" id="oCount" aria-live="polite"></div>
+    <div id="oList"></div>
+  </div>
 
   <footer>
     Datos compilados de reportes públicos (prensa especializada, fabricantes, CISA, CSA y fuentes citadas en cada tarjeta) con corte al <code>24-nov-2026</code>.
     Las cifras de impacto son estimaciones o afirmaciones de los atacantes cuando así se indica; verifica siempre con la fuente primaria.
+    El tracker usa el catálogo CISA KEV (<code>cisagov/kev-data</code>, GitHub) en vivo, con un snapshot embebido como respaldo. Las caídas llevan una insignia de verificación según lo que pude contrastar con fuentes.
   </footer>
 </div>
 
@@ -344,6 +462,339 @@ function render(){
   list.forEach(e=>{ if(e.year!==y){ y=e.year; tl.append(h("li",{class:"year",text:y})); } tl.append(card(e)); });
 }
 render();
+
+/* ================= EXTENSIÓN: gráfico, CVE tracker y caídas ================= */
+/* Fecha exacta de cada incidente (mismo orden que EVENTS). "~" = aproximada. */
+const YMD=["2026-10-29","2026-10-05","2026-07-16","2026-05-01","2026-03-11","2026-03-19","2026-03-18","2025-11-13","2025-10-15","2025-10-05~","2025-09-02","2025-09-15","2025-08-15~","2025-07-19","2025-07-09","2025-04-22","2025-02-21"];
+EVENTS.forEach((e,i)=>{const v=YMD[i];e.approx=v.endsWith("~");e.ymd=v.replace("~","");});
+[...EVENTS].sort((a,b)=>a.ymd<b.ymd?-1:a.ymd>b.ymd?1:a.i-b.i).forEach((e,k)=>{e.num=k+1;});
+
+const fmtN=n=>Number(n).toLocaleString("es-AR");
+const DAY=864e5, T=s=>Date.parse(s+"T00:00:00Z"), ymdOf=t=>new Date(t).toISOString().slice(0,10);
+const todayUTC=()=>{const n=new Date();return Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate());};
+const pad2=n=>String(n).padStart(2,"0");
+const link=(t,u)=>h("a",{href:u,target:"_blank",rel:"noopener noreferrer",text:t});
+const short=t=>{const s=t.split(":")[0];return s.length>34?s.slice(0,33)+"…":s;};
+
+/* ---------- caídas de sistema ---------- */
+const ST={ok:"Confirmado",part:"Parcial",unv:"No verificado"};
+const FWM=["FourWeekMBA · ola de caídas","https://fourweekmba.com/ai-the-november-outage-wave-explained-9-failures-7-causes/"];
+const ATLAS=["Outage Atlas · 12–17 nov","https://guptadeepak.com/outage-atlas/clusters/2026-11-12-to-17/"];
+const OUTAGES=[
+{ymd:"2026-11-17",when:"17 nov 2026",ent:"Apple",st:"ok",
+ imp:"Su página de estado marcó 16 servicios afectados desde las 16:15 UTC (iCloud, App Store, Apple Pay, Apple Music y otros). No se informó duración.",
+ cause:"Actualización interna del sistema. Apple indicó que no fue un ciberataque (según Bloomberg).",
+ note:"",
+ src:[FWM,["Forbes Middle East (aportada)","https://forbesmiddleeast.com/innovation/technology/when-the-digital-world-goes-dark-major-tech-outages-of-2026"]]},
+{ymd:"2026-11-17",when:"17 nov 2026",ent:"NSA (NSA Net)",st:"ok",
+ imp:"Caída temporal de las comunicaciones en la red interna clasificada, según CNN (seis fuentes).",
+ cause:"La NSA habló de una “degradación temporal” durante un mantenimiento rutinario programado.",
+ note:"Tu tabla indica 17–18 nov; las fuentes que revisé solo ubican el hecho el 17.",
+ src:[FWM,["The Conversation (aportada)","https://theconversation.com/seven-major-tech-incidents-in-a-week-whats-going-on-and-what-can-we-do-296918"]]},
+{ymd:"2026-11-16",when:"16 nov 2026",ent:"United Airlines",st:"part",
+ imp:"Demoras en salidas durante ~1,5 horas (cifra de AP).",
+ cause:"United habló de un problema tecnológico que no parecía de ciberseguridad.",
+ note:"Las apps de peso y planificación de vuelo y la “infraestructura envejecida” no figuran en las fuentes que pude abrir: ninguna publica una causa concreta.",
+ src:[FWM,["Yahoo Finance (aportada)","https://finance.yahoo.com/technology/article/cyberattacks-and-outages-here-are-all-of-the-major-national-disruptions-in-november-181143019.html"]]},
+{ymd:"2026-11-16",when:"16 nov 2026",ent:"JPMorgan Chase",st:"part",
+ imp:"Interrupción temporal de ~8 h 37 min (≈517 min, cálculo de una publicación).",
+ cause:"Error de software en hardware on-premise del banco; sin evidencia de causa cibernética.",
+ note:"El efecto dominó sobre Zelle, Bank of America y Wells Fargo no lo pude confirmar.",
+ src:[FWM,["Bloomberg (aportada)","https://www.bloomberg.com/news/articles/2026-11-20/what-caused-the-us-tech-outages-why-experts-expect-more"]]},
+{ymd:"2026-11-15",when:"15 nov 2026",ent:"Amazon Web Services (US-EAST-1)",st:"unv",
+ imp:"Según tu tabla: fallos de conectividad y autenticación durante ~3 horas.",
+ cause:"Sin causa oficial publicada; se descartó actividad maliciosa (según tu tabla).",
+ note:"No pude confirmar este incidente en esa fecha. El único evento de US-EAST-1 en 2026 que sí verifiqué es otro: 7-may-2026, falla de refrigeración en una zona de disponibilidad, ~20,5 h.",
+ src:[["Network World · otro incidente (7-may-2026)","https://www.networkworld.com/article/4168878/aws-hit-by-us-east-1-outage-after-data-center-thermal-event.html"]]},
+{ymd:"2026-11-13",when:"13–14 nov 2026",ent:"Workday",st:"part",
+ imp:"RR. HH. y nómina fuera de servicio en dos centros de datos, ~18 horas (≈1.065 min). Restaurado a las 11:00 EST del 14-nov.",
+ cause:"Workday aclaró que no fue un incidente de ciberseguridad. Un registro de terceros apunta a una prueba de recuperación ante desastres (causa preliminar).",
+ note:"La causa de prueba de DR no está confirmada oficialmente.",
+ src:[FWM,ATLAS,["TechRepublic (aportada)","https://www.techrepublic.com/article/news-november-2026-tech-outages-timeline/"]]},
+{ymd:"2026-11-13",when:"13 nov 2026",ent:"Anthropic (Claude)",st:"part",
+ imp:"Errores elevados e inicios de sesión fallidos en claude.ai, Claude Code y la consola (platform.claude.com). Unas 2 horas (09:58–11:58 UTC).",
+ cause:"No detallada en el registro oficial de incidentes.",
+ note:"Un reporte muestra la API como operativa durante el incidente; tu tabla la incluye entre los afectados.",
+ src:[["SmartScope · estado oficial 13-nov","https://smartscope.blog/en/blog/claude-authentication-issues-official-claude-status-november-13-2026/"],["TechRepublic (aportada)","https://www.techrepublic.com/article/news-november-2026-tech-outages-timeline/"]]},
+{ymd:"2026-11-13",when:"13 nov 2026",ent:"FAA (aviación de EE. UU.)",st:"part",
+ imp:"Parada nacional de vuelos (ground stop) de ~254 min (≈4 h 14 min) por fallas de comunicación en varios centros de control de tráfico aéreo.",
+ cause:"La FAA no determinó la causa. Fuentes del gobierno citadas por Reuters apuntan a un router instalado por L3Harris durante trabajos de cambio de cobre a fibra.",
+ note:"“Arkansas” y “peor fin de semana aéreo en décadas” no aparecen en las fuentes que pude abrir. La causa es preliminar.",
+ src:[FWM,["Bloomberg (aportada)","https://www.bloomberg.com/news/articles/2026-11-20/what-caused-the-us-tech-outages-why-experts-expect-more"]]},
+{ymd:"2026-11-12",when:"12–13 nov 2026",ent:"Microsoft 365",st:"part",
+ imp:"Interrupción global de Outlook, Teams, Copilot y Office. Duración: ~24 h (≈1.430 min, 16:20 UTC del 12 al 16:10 UTC del 13) según una fuente; otra registra 35 h 55 min.",
+ cause:"Microsoft habló de un defecto latente que dejó los servidores saturados bajo carga (aumento de tráfico); aseguró que no fue ciberataque ni IA.",
+ note:"Tu tabla dice 12–14 nov y “más de 18 horas”: las fuentes dan 24–36 h. El 80 % de servidores, los 70 países, el NHS, el error “oculto desde julio” y el cambio de enrutamiento no pude confirmarlos.",
+ src:[FWM,ATLAS]},
+{ymd:"2026-10-20",when:"20 oct 2026",ent:"Google Cloud (Londres, europe-west2)",st:"part",
+ imp:"Apagón de 7 h 52 min (07:08–15:00 BST) en la zona europe-west2-b: Compute Engine, GKE, Cloud SQL y Cloud Storage. Afectó a servicios bancarios y empresariales.",
+ cause:"Evento de energía en el centro de datos.",
+ note:"Tu tabla indica 19–20 oct, “seis horas” y fallo de los generadores de respaldo. La fuente que abrí da 7 h 52 min y no menciona generadores (otra señala una falla en un PLC).",
+ src:[["TechRepublic · Google Cloud Londres","https://www.techrepublic.com/article/news-google-cloud-london-outage-emea-uk/"],["Forbes Middle East (aportada)","https://forbesmiddleeast.com/innovation/technology/when-the-digital-world-goes-dark-major-tech-outages-of-2026"]]}
+];
+OUTAGES.forEach((o,i)=>{o.i=i;o.hay=norm([o.ent,o.imp,o.cause,o.note,ST[o.st],o.when].join(" "));});
+const OS={st:"all"};
+function renderOut(){
+  const list=OUTAGES.filter(o=>OS.st==="all"||o.st===OS.st), box=$("#oList");
+  box.replaceChildren(); $("#oCount").textContent=list.length+" de "+OUTAGES.length+" caídas";
+  list.forEach(o=>{
+    const blks=[h("div",{class:"blk"},h("h3",{text:"// Causa reportada"}),h("p",{text:o.cause}))];
+    if(o.note) blks.push(h("div",{class:"blk note"},h("h3",{text:"// Nota de verificación"}),h("p",{text:o.note})));
+    blks.push(h("div",{class:"blk"},h("h3",{text:"// Fuentes"}),h("ul",{},o.src.filter(s=>/^https:\/\//.test(s[1])).map(s=>h("li",{},link(s[0],s[1]))))));
+    box.append(h("div",{class:"ocard o-"+o.st},h("article",{class:"card"},
+      h("div",{class:"meta"},h("time",{class:"date",datetime:o.ymd,text:o.when}),h("span",{class:"tag st-"+o.st,text:ST[o.st]})),
+      h("h2",{class:"t",text:o.ent}),h("p",{class:"sum",text:o.imp}),h("div",{class:"more",style:"margin-top:12px"},blks))));
+  });
+}
+[["all","Todas"],["ok","Confirmado"],["part","Parcial"],["unv","No verificado"]].forEach(([v,l])=>{
+  const b=h("button",{class:"chip",type:"button","aria-pressed":v==="all"?"true":"false",text:l});
+  b.addEventListener("click",()=>{OS.st=v;$("#oRow").querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",String(c===b)));renderOut();});
+  $("#oRow").append(b);
+});
+
+/* ---------- datos CISA KEV (en vivo + snapshot de respaldo) ---------- */
+const KEV_SNAP={"version":"2026.11.24","asOf":"2026-11-24","total":1795,"ransom":362,"daily":{"2026-11-24":3,"2026-11-23":2,"2026-11-20":4,"2026-11-18":4,"2026-11-17":1,"2026-11-13":2,"2026-11-10":6,"2026-11-09":4,"2026-11-06":1,"2026-11-04":1,"2026-11-03":1,"2026-10-30":2,"2026-10-29":2,"2026-10-28":2,"2026-10-27":2,"2026-10-26":2,"2026-10-23":2,"2026-10-20":6,"2026-10-16":2,"2026-10-15":1,"2026-10-14":4,"2026-10-13":2,"2026-10-08":5,"2026-10-04":1,"2026-10-02":2,"2026-10-01":1,"2026-09-30":1,"2026-09-29":1,"2026-09-27":2,"2026-09-25":3,"2026-09-24":2,"2026-09-22":4,"2026-09-21":1,"2026-09-18":3,"2026-09-16":3,"2026-09-14":1,"2026-09-11":4,"2026-09-10":2,"2026-09-09":4,"2026-09-08":4,"2026-09-04":1,"2026-09-02":7,"2026-08-31":2,"2026-08-27":3,"2026-08-26":6,"2026-08-25":1,"2026-08-24":1,"2026-08-21":1,"2026-08-20":2,"2026-08-19":1,"2026-08-18":4,"2026-08-17":1,"2026-08-11":3,"2026-08-07":1,"2026-08-05":1,"2026-08-04":3,"2026-08-03":1,"2026-07-29":1,"2026-07-27":2,"2026-07-22":2,"2026-07-21":4,"2026-07-16":3,"2026-07-15":2,"2026-07-14":4,"2026-07-13":1,"2026-07-10":2,"2026-07-07":4,"2026-07-01":1,"2026-06-29":1,"2026-06-25":2,"2026-06-23":4,"2026-06-18":1,"2026-06-16":1,"2026-06-15":2,"2026-06-12":1,"2026-06-11":1,"2026-06-09":3,"2026-06-08":2,"2026-06-05":1,"2026-06-03":1,"2026-06-02":2,"2026-06-01":1,"2026-05-29":1,"2026-05-27":3,"2026-05-26":1,"2026-05-22":1,"2026-05-21":2,"2026-05-20":7,"2026-05-15":1,"2026-05-14":1,"2026-05-08":1,"2026-05-07":1,"2026-05-06":1,"2026-05-01":1,"2026-04-30":1,"2026-04-28":2,"2026-04-24":4,"2026-04-23":1,"2026-04-22":1,"2026-04-20":8,"2026-04-16":1,"2026-04-14":2,"2026-04-13":7,"2026-04-08":1,"2026-04-06":1,"2026-04-02":1,"2026-04-01":1,"2026-03-30":1,"2026-03-27":1,"2026-03-26":1,"2026-03-25":1,"2026-03-20":5,"2026-03-19":1,"2026-03-18":2,"2026-03-16":1,"2026-03-13":2,"2026-03-11":1,"2026-03-09":3,"2026-03-05":5,"2026-03-03":2,"2026-02-25":2,"2026-02-24":1,"2026-02-20":2,"2026-02-18":2,"2026-02-17":4,"2026-02-13":1,"2026-02-12":4,"2026-02-10":6,"2026-02-05":2,"2026-02-03":4,"2026-01-29":1,"2026-01-27":1,"2026-01-26":5,"2026-01-23":1,"2026-01-22":4,"2026-01-21":1,"2026-01-13":1,"2026-01-12":1,"2026-01-07":2,"2025-12-29":1,"2025-12-22":1,"2025-12-19":1,"2025-12-17":3,"2025-12-16":1,"2025-12-15":2,"2025-12-12":2,"2025-12-11":1,"2025-12-09":2,"2025-12-08":2,"2025-12-05":1,"2025-12-03":1,"2025-12-02":2,"2025-11-28":1,"2025-11-21":1,"2025-11-19":1,"2025-11-18":1,"2025-11-14":1,"2025-11-12":3,"2025-11-10":1,"2025-11-04":2,"2025-10-30":2,"2025-10-28":2,"2025-10-24":2,"2025-10-22":1,"2025-10-20":5,"2025-10-15":1,"2025-10-14":4,"2025-10-09":1,"2025-10-07":1,"2025-10-06":7,"2025-10-02":5,"2025-09-29":5,"2025-09-25":2,"2025-09-23":1,"2025-09-11":1,"2025-09-04":3,"2025-09-03":2,"2025-09-02":2,"2025-08-29":1,"2025-08-26":1,"2025-08-25":3,"2025-08-21":1,"2025-08-18":1,"2025-08-13":2,"2025-08-12":3,"2025-08-05":3,"2025-07-28":3,"2025-07-22":6,"2025-07-20":1,"2025-07-18":1,"2025-07-14":1,"2025-07-10":1,"2025-07-07":4,"2025-07-02":1,"2025-07-01":2,"2025-06-30":1,"2025-06-25":3,"2025-06-17":1,"2025-06-16":2,"2025-06-10":2,"2025-06-09":2,"2025-06-05":1,"2025-06-03":3,"2025-06-02":5,"2025-05-22":1,"2025-05-19":6,"2025-05-15":2,"2025-05-14":1,"2025-05-13":5,"2025-05-12":1,"2025-05-07":2,"2025-05-06":1,"2025-05-05":1,"2025-05-02":2,"2025-05-01":2,"2025-04-29":1,"2025-04-28":3,"2025-04-17":3,"2025-04-16":1,"2025-04-09":2,"2025-04-08":2,"2025-04-07":1,"2025-04-04":1,"2025-04-01":1,"2025-03-31":1,"2025-03-27":1,"2025-03-26":2,"2025-03-24":1,"2025-03-19":3,"2025-03-18":2,"2025-03-13":2,"2025-03-11":6,"2025-03-10":5,"2025-03-04":4,"2025-03-03":5,"2025-02-25":2,"2025-02-24":2,"2025-02-21":1,"2025-02-20":2,"2025-02-18":2,"2025-02-13":1,"2025-02-12":2,"2025-02-11":4,"2025-02-07":1,"2025-02-06":5,"2025-02-05":1,"2025-02-04":4,"2025-01-29":1,"2025-01-24":1,"2025-01-23":1,"2025-01-16":1,"2025-01-14":4,"2025-01-13":2,"2025-01-08":1,"2025-01-07":3},"rows":[{"id":"CVE-2026-132224","v":"Optimizely","p":"Web Experimentation","n":"Optimizely Web Experimentation External Control of Critical State Data Vulnerability","d":"2026-11-24","due":"2026-11-27","r":false,"s":"Optimizely Web Experimentation contains an external control of critical state data vulnerability in its account signup flow that could allow an attacker to impersonate existing customer users and modify Project JavaScript. Successful exploitation can result in","a":"","c":["CWE-642"],"u":[]},{"id":"CVE-2026-132165","v":"Drupal","p":"Core","n":"Drupal Core Remote Code Execution Vulnerability","d":"2026-11-24","due":"2026-11-27","r":false,"s":"Drupal Core contains a not failing securely vulnerability that could allow an unauthenticated attacker to take over an existing site or execute arbitrary code via the Drupal installer. Under specific conditions, the attacker can use install.php to attempt to r","a":"","c":["CWE-636"],"u":[]},{"id":"CVE-2026-131914","v":"Idunno","p":"AntiCsrf","n":"Idunno AntiCsrf Deserialization of Untrusted Data Vulnerability","d":"2026-11-24","due":"2026-11-27","r":false,"s":"Idunno AntiCsrf contains a deserialization of untrusted data vulnerability that allows an unauthenticated remote attacker to execute arbitrary code via object injection. The impacted product(s) could be end-of-life (EoL) and/or end-of-service (EoS). Users are ","a":"","c":["CWE-502"],"u":[]},{"id":"CVE-2026-134624","v":"N-able","p":"MailAssure","n":"N-able MailAssure (SpamExperts) Server-Side Request Forgery (SSRF) Vulnerability","d":"2026-11-23","due":"2026-11-26","r":false,"s":"N-able MailAssure (SpamExperts) contains a server-side request forgery vulnerability in the LDAP synchronization connection check that allows an authenticated API user to connect to arbitrary internal hosts and ports, determine which are reachable, and send cr","a":"","c":["CWE-918"],"u":[]},{"id":"CVE-2026-133968","v":"Project MONAI","p":"MONAI Label","n":"Project MONAI MONAI Label Path Traversal Vulnerability","d":"2026-11-23","due":"2026-11-26","r":false,"s":"Project MONAI MONAI Label contains a path traversal vulnerability that allows an unauthenticated remote attacker to write arbitrary files outside the intended datastore directory, potentially resulting in remote code execution.","a":"","c":["CWE-24"],"u":[]},{"id":"CVE-2026-76466","v":"Cisco","p":"Expressway Series","n":"Cisco Expressway Series Use of Hard-coded Credentials Vulnerability","d":"2026-11-20","due":"2026-11-23","r":false,"s":"Cisco Expressway Series contains a use of hard-coded credentials vulnerability that allows an unauthenticated, remote attacker with persistent cookies and network access to execute commands as root on a clustered device via the database service.","a":"","c":["CWE-798"],"u":[]},{"id":"CVE-2026-129448","v":"Apache","p":"Roller","n":"Apache Roller Deserialization of Untrusted Data Vulnerability","d":"2026-11-20","due":"2026-11-23","r":false,"s":"Apache Roller contains a deserialization of untrusted data vulnerability that allows an unauthenticated remote attacker to execute arbitrary code via the XML-RPC endpoint, which accepts and deserializes vendor extension types before authentication. This CVE co","a":"","c":["CWE-502"],"u":[]},{"id":"CVE-2026-123890","v":"Broadcom","p":"VMware vCenter","n":"VMWare vCenter Authentication Bypass Using an Alternate Path or Channel Vulnerability","d":"2026-11-20","due":"2026-11-23","r":false,"s":"Broadcom VMware vCenter contains an authentication bypass using an alternate path or channel vulnerability in the VMware Directory Service that allows an unauthenticated attacker with network access to vCenter to bypass authentication and gain unauthorized acc","a":"","c":["CWE-288"],"u":[]},{"id":"CVE-2025-42884","v":"SAP","p":"NetWeaver","n":"SAP NetWeaver Improper Neutralization of Special Elements in Data Query Logic Vulnerability","d":"2026-11-20","due":"2026-11-23","r":false,"s":"SAP NetWeaver Enterprise Portal contains an improper neutralization of special elements in data query logic vulnerability that allows an unauthenticated attacker to disclose or modify server information via injected JNDI environment properties or a URL used du","a":"","c":["CWE-943"],"u":[]},{"id":"CVE-2026-90817","v":"Vanderbilt University","p":"Research Electronic Data Capture (REDCap)","n":"Vanderbilt University Research Electronic Data Capture (REDCap) Code Injection Vulnerability","d":"2026-11-18","due":"2026-11-21","r":false,"s":"Vanderbilt University Research Electronic Data Capture (REDCap) contains a code injection vulnerability which could allow an unauthenticated attacker to execute arbitrary code on the server. An attacker could exploit this via crafted HTTP requests that access ","a":"","c":["CWE-73","CWE-94"],"u":[]},{"id":"CVE-2026-90436","v":"Apache","p":"Axis","n":"Apache Axis Unsafe Reflection Vulnerability","d":"2026-11-18","due":"2026-11-21","r":false,"s":"Apache Axis contains an unsafe reflection vulnerability that could allow an unauthenticated remote attacker to execute arbitrary code via a crafted SOAP fault message that causes Axis to load and instantiate an attacker-specified class when a suitable class is","a":"","c":["CWE-470"],"u":[]},{"id":"CVE-2026-40217","v":"BerriAI","p":"LiteLLM","n":"BerriAI LiteLLM Unprotected Alternate Channel Vulnerability","d":"2026-11-18","due":"2026-12-02","r":false,"s":"BerriAI LiteLLM contains an unprotected alternate channel vulnerability that could allow remote attackers to execute arbitrary code via bytecode rewriting at the /guardrails/test_custom_code URI.","a":"","c":["CWE-420"],"u":[]},{"id":"CVE-2024-10441","v":"Synology","p":"DiskStation Manager (DSM)","n":"Synology DiskStation Manager (DSM) Improper Encoding or Escaping of Output Vulnerability","d":"2026-11-18","due":"2026-11-21","r":true,"s":"Synology DSM contains an improper encoding or escaping of output vulnerability in the system plugin daemon in Synology BeeStation OS (BSM) that could allow a remote attacker to execute arbitrary code via unspecified vectors.","a":"","c":["CWE-116"],"u":[]},{"id":"CVE-2026-115731","v":"Perforce","p":"Puppet Enterprise","n":"Perforce Puppet Enterprise Deserialization of Untrusted Data Vulnerability","d":"2026-11-17","due":"2026-12-01","r":false,"s":"Perforce Puppet Enterprise contains a deserialization of untrusted data vulnerability in Puppet’s report-processing code that allows a client with any CA-signed agent certificate to execute arbitrary code on the Puppet Server as the service user by submitting ","a":"","c":["CWE-502","CWE-94"],"u":[]},{"id":"CVE-2026-123039","v":"Check Point","p":"Multiple Products","n":"Check Point Multiple Products Incorrect Permission Assignment for Critical Resource Vulnerability","d":"2026-11-13","due":"2026-11-16","r":false,"s":"Check Point Firewall, Multi-Domain Security Management Server, Scalable Platforms, Security Gateway, and Security Management Server contain an incorrect permissions assignment for critical resources vulnerability when the Gaia OS DynamicCLI daemon runs as root","a":"","c":["CWE-732","CWE-862"],"u":[]},{"id":"CVE-2026-114713","v":"UnrealIRCd","p":"UnrealIRCd","n":"UnrealIRCd Improper Neutralization of Delimiters Vulnerability","d":"2026-11-13","due":"2026-11-16","r":false,"s":"UnrealIRCd UnrealIRCd contains an improper neutralization of delimiters vulnerability that allows any user on a network with two or more linked servers to inject server-to-server commands that are executed with server authority.","a":"","c":["CWE-140"],"u":[]},{"id":"CVE-2026-20320","v":"Cisco","p":"BroadWorks","n":"Cisco BroadWorks Improper Restriction of XML External Entity Reference Vulnerability","d":"2026-11-10","due":"2026-11-24","r":false,"s":"Cisco BroadWorks contains an improper restriction of XML external entity reference vulnerability that could allow an unauthenticated, remote attacker to read sensitive configuration information on an affected system.","a":"","c":["CWE-611"],"u":[]},{"id":"CVE-2026-125350","v":"Google","p":"Chromium","n":"Google Chromium Use-After-Free Vulnerability","d":"2026-11-10","due":"2026-11-24","r":false,"s":"Google Chromium contains a use-after-free vulnerability in the XML component that could allow a remote attacker to execute arbitrary code inside the sandbox via a specially crafted webpage. This vulnerability could affect multiple web browsers that utilize Chr","a":"","c":["CWE-416"],"u":[]},{"id":"CVE-2026-124194","v":"Microsoft","p":"Office","n":"Microsoft Office Outlook Missing User Interaction for Potentially Unsafe Action Vulnerability","d":"2026-11-10","due":"2026-11-24","r":false,"s":"Microsoft Office Outlook contains a missing user interaction for potentially unsafe action vulnerability that allows an unauthorized attacker to perform spoofing over a network.","a":"","c":["CWE-356"],"u":[]},{"id":"CVE-2026-116606","v":"Barracuda Networks","p":"Barracuda Email Security Gateway (ESG)","n":"Barracuda Networks Email Security Gateway (ESG) Authentication Bypass Using an Alternate Path or Channel Vulnerability","d":"2026-11-10","due":"2026-11-13","r":false,"s":"Barracuda Networks Email Security Gateway (ESG) contains an authentication bypass using an alternate path or channel that could allow an unauthenticated remote attacker to invoke a configuration-import function and restore a crafted, compatible backup archive,","a":"","c":["CWE-288"],"u":[]},{"id":"CVE-2026-111793","v":"Openwave Messaging Limited","p":"Webtop Media Transcoder","n":"Openwave Messaging Limited Webtop Media Transcoder Incorrect Resource Transfer Between Spheres Vulnerability","d":"2026-11-10","due":"2026-11-24","r":false,"s":"Openwave Messaging Limited Webtop Media Transcoder contains an incorrect resource transfer between spheres vulnerability that may allow an authenticated user to process and convert unintended document types if bypassing the Webmail experience.","a":"","c":["CWE-669"],"u":[]},{"id":"CVE-2026-111560","v":"Barracuda Networks","p":"Multiple Products","n":"Barracuda Networks Multiple Products OS Command Injection Vulnerability","d":"2026-11-10","due":"2026-11-13","r":false,"s":"Barracuda Networks Email Security Gateway (ESG), Load Balancer, Application Delivery Controller (ADC), Message Archiver (BMA), WAF Control Center (WCC), Web Application Firewall (WAF), and Web Security Gateway (WSG) contain an OS command injection vulnerabilit","a":"","c":["CWE-78"],"u":[]},{"id":"CVE-2026-123218","v":"IBM","p":"Aspera Faspex","n":"IBM Aspera Faspex Incorrect Authorization Vulnerability","d":"2026-11-09","due":"2026-11-12","r":false,"s":"IBM Aspera Faspex contains an incorrect authorization vulnerability that could allow an authenticated user to craft a specific message to bypass authorization, causing privilege escalations.","a":"","c":["CWE-863"],"u":[]},{"id":"CVE-2026-123158","v":"OpenBSD","p":"OpenSSH","n":"OpenBSD OpenSSH Unexpected Status Code or Return Value Vulnerability","d":"2026-11-09","due":"2026-11-12","r":false,"s":"OpenBSD OpenSSH on Linux contains an unexpected status code or return value vulnerability that could allow for authentication bypass.","a":"","c":["CWE-394"],"u":[]},{"id":"CVE-2026-116779","v":"SignalWire","p":"FreeSwitch","n":"SignalWire FreeSwitch Code Injection Vulnerability","d":"2026-11-09","due":"2026-11-12","r":false,"s":"SignalWire FreeSwitch contains a code injection vulnerability that permits configuration and credential disclosure, arbitrary call control, and command execution.","a":"","c":["CWE-77","CWE-78","CWE-749"],"u":[]},{"id":"CVE-2026-102895","v":"GPUStack","p":"GPUStack","n":"GPUStack Improper Authentication Vulnerability","d":"2026-11-09","due":"2026-11-12","r":false,"s":"GPUStack contains an improper authentication vulnerability which could allow unauthenticated administrative access, including user and model changes, persistent administrator API-key creation, disclosure of worker and cloud-provider secrets, and code execution","a":"","c":["CWE-287","CWE-290","CWE-346"],"u":[]},{"id":"CVE-2026-19868","v":"SonicWall","p":"SonicOS SSLVPN","n":"SonicWall SonicOS SSLVPN Use of Single-factor Authentication Vulnerability","d":"2026-11-06","due":"2026-11-20","r":false,"s":"SonicWall SonicOS SSLVPN contains a use of single-factor authentication vulnerability that may allow a user with valid credentials for an alternate authentication method to bypass SAML authentication controls. Successful exploitation may also bypass SAML-enfor","a":"","c":["CWE-308"],"u":[]},{"id":"CVE-2024-27834","v":"Apple","p":"Multiple Products","n":"Apple Multiple Products Improper Authentication Vulnerability","d":"2026-11-04","due":"2026-11-18","r":false,"s":"Apple iOS, iPadOS, macOS, Safari, tvOS and watchOS 10.5 contain an improper authentication vulnerability which could allow an attacker with arbitrary read and write capability to bypass pointer authentication.","a":"","c":["CWE-287"],"u":[]},{"id":"CVE-2026-119977","v":"WordPress","p":"WordPress Core","n":"WordPress WordPress Core Time-of-check Time-of-use (TOCTOU) Race Condition Vulnerability","d":"2026-11-03","due":"2026-11-06","r":false,"s":"WordPress WordPress Core contains a time-of-check time-of-use (TOCTOU) race condition vulnerability that could allow unauthenticated attackers to execute code on the server during the upgrade window. This is due to predictable, web-accessible staging paths use","a":"","c":["CWE-367"],"u":[]},{"id":"CVE-2026-118527","v":"Ivanti","p":"Connect Secure","n":"Ivanti Connect Secure Generation of Predictable Numbers or Identifiers Vulnerability","d":"2026-10-30","due":"2026-11-13","r":false,"s":"Ivanti Connect Secure contains a generation of predictable numbers or identifiers vulnerability that allows a remote authenticated attacker to upload files with attacker-controlled content to a known location on disk. This vulnerability can be chained with CVE","a":"","c":["CWE-340"],"u":[]},{"id":"CVE-2026-111357","v":"Ivanti","p":"Connect Secure","n":"Ivanti Connect Secure Missing Authentication for Critical Function Vulnerability","d":"2026-10-30","due":"2026-11-02","r":false,"s":"Ivanti Connect Secure contains a missing authentication for critical function vulnerability that could allow a local authenticated attacker to escalate their privileges. This vulnerability can be chained with CVE-2026-104935 and CVE-2026-118527.","a":"","c":["CWE-306","CWE-862","CWE-345"],"u":[]},{"id":"CVE-2026-97229","v":"GitLab","p":"Community Edition and Enterprise Edition","n":"GitLab Community Edition and Enterprise Edition Integer Overflow or Wraparound Vulnerability","d":"2026-10-29","due":"2026-11-01","r":false,"s":"GitLab Community Edition and Enterprise Edition contain a integer overflow or wraparound vulnerability that could allow an unauthenticated user to execute arbitrary code on the GitLab server via a specially crafted regular expression in a CI/CD configuration, ","a":"","c":["CWE-190"],"u":[]},{"id":"CVE-2026-76418","v":"Cisco","p":"Secure Firewall ASA Software and Cisco Secure FTD Software","n":"Cisco Secure Firewall ASA Software and Cisco Secure FTD Software Unchecked Return Value to NULL Pointer Dereference Vulnerability","d":"2026-10-29","due":"2026-11-01","r":false,"s":"Cisco Secure Firewall ASA Software and Cisco Secure FTD Software contains an unchecked return value to NULL pointer dereference vulnerability that could allow an unauthenticated, remote attacker to cause the device to reload unexpectedly, resulting in a denial","a":"","c":["CWE-690"],"u":[]},{"id":"CVE-2026-46300","v":"Linux","p":"Kernel","n":"Linux Kernel Missing Initialization of a Variable Vulnerability","d":"2026-10-28","due":"2026-10-31","r":false,"s":"Linux Kernel contains a missing initialization of a variable vulnerability that could allow for unintended modification of page-cache-backed data via failure to preserve the shared-fragment marker during socket buffer coalescing, causing ESP input processing t","a":"","c":["CWE-456"],"u":[]},{"id":"CVE-2026-41709","v":"Broadcom","p":"VMware ESX","n":"Broadcom VMWare ESX Insufficient Logging Vulnerability","d":"2026-10-28","due":"2026-11-11","r":false,"s":"Broadcom VMWare ESX contains an insufficient logging vulnerability that could allow a malicious actor with admin access to perform certain operations without being logged.","a":"","c":["CWE-778"],"u":[]},{"id":"CVE-2026-48356","v":"Adobe","p":"Commerce and Magento","n":"Adobe Commerce and Magento Unrestricted Upload of File with Dangerous Type Vulnerability","d":"2026-10-27","due":"2026-11-10","r":false,"s":"Adobe Commerce and Magento contain an unrestricted upload of file with dangerous type vulnerability that could result in arbitrary code execution in the context of the current user, potentially gaining elevated access or control over the victim's account or se","a":"","c":["CWE-434"],"u":[]},{"id":"CVE-2026-111497","v":"Google","p":"Brotli","n":"Google Brotli Unchecked Return Value Vulnerability","d":"2026-10-27","due":"2026-11-10","r":false,"s":"Google Brotli contains an unchecked return value vulnerability that allows a remote unauthenticated attacker to corrupt adjacent decoder state memory, disclose sensitive memory contents, cause a denial of service, or potentially execute arbitrary code using a ","a":"","c":["CWE-252","CWE-787"],"u":[]},{"id":"CVE-2026-109619","v":"PHP Group","p":"PHP","n":"PHP Stale Internal Request-State Vulnerability","d":"2026-10-26","due":"2026-10-29","r":false,"s":"PHP contains a stale internal request-state vulnerability that allows for unauthenticated remote code execution.","a":"","c":["CWE-416","CWE-755","CWE-824","CWE-1325","CWE-1419"],"u":[]},{"id":"CVE-2026-109618","v":"PHP Group","p":"PHP","n":"PHP Memory Corruption Vulnerability","d":"2026-10-26","due":"2026-10-29","r":false,"s":"PHP contains an out-of-memory corruption vulnerability that allows for unauthenticated remote code execution.","a":"","c":["CWE-416","CWE-755","CWE-824","CWE-1325","CWE-1419"],"u":[]},{"id":"CVE-2026-114625","v":"Arista","p":"VeloCloud Orchestrator","n":"Arista VeloCloud Orchestrator SQL Injection Vulnerability","d":"2026-10-23","due":"2026-10-26","r":false,"s":"Arista VeloCloud Orchestrator on-prem contains a SQL injection vulnerability that may allow a remote attacker to access privileged internal functionality and impact the VCO host. Successful exploitation may compromise the confidentiality, integrity, and availa","a":"","c":["CWE-89"],"u":[]},{"id":"CVE-2026-110447","v":"Collabora","p":"Collabora Online – Built-in CODE Server","n":"Collabora Online – Built-in CODE Server OS Command Injection Vulnerability","d":"2026-10-23","due":"2026-10-26","r":false,"s":"Collabora Collabora Online – Built-in CODE Server when used within the NextCloud platform contains an OS command injection vulnerability that allows for remote code execution when the CODE server isn't running.","a":"","c":["CWE-78"],"u":[]},{"id":"CVE-2026-96656","v":"Plex","p":"Media Server","n":"Plex Media Server External Control of File Name or Path Vulnerability","d":"2026-10-20","due":"2026-10-23","r":false,"s":"Plex Media Server contains an external control of file name or path vulnerability which can allow an admin user to write arbitrary files that may be executed on load. This vulnerability can be chained with CVE-2026-96652, CVE-2026-96654, and CVE-2026-96655.","a":"","c":["CWE-73"],"u":[]},{"id":"CVE-2026-96655","v":"Plex","p":"Media Server","n":"Plex Media Server Server-Side Request Forgery (SSRF) Vulnerability","d":"2026-10-20","due":"2026-11-03","r":false,"s":"Plex Media Server contains a server-side request forgery (SSRF) vulnerability that could allow an authenticated user to request arbitrary internal or external addresses via the '/video/:/transcode/universal' path parameter. This vulnerability can be chained wi","a":"","c":["CWE-918"],"u":[]},{"id":"CVE-2026-96654","v":"Plex","p":"Media Server","n":"Plex Media Server Improper Neutralization of Encoded URI Schemes in a Web Page Vulnerability","d":"2026-10-20","due":"2026-10-23","r":false,"s":"Plex Media Server contains an improper neutralization of encoded URI schemes in a web page vulnerability that could allow an attacker to call other plugins' functions and supply their own parameters. This vulnerability can be chained with CVE-2026-96652, CVE-2","a":"","c":["CWE-84"],"u":[]},{"id":"CVE-2026-96652","v":"Plex","p":"Media Server","n":"Plex Media Server Server-Side Request Forgery (SSRF) Vulnerability","d":"2026-10-20","due":"2026-11-03","r":false,"s":"Plex Media Server contains a server-side request forgery (SSRF) vulnerability which could allow an attacker using any X-Plex-Token value to include a full URL in the 'protocol' parameter and force the Plex server to POST to the attacker's chosen destination. T","a":"","c":["CWE-918"],"u":[]},{"id":"CVE-2026-110936","v":"Siemens","p":"Software Center","n":"Siemens Software Center Uncontrolled Search Path Element Vulnerability","d":"2026-10-20","due":"2026-11-03","r":false,"s":"Siemens Software Center contains an uncontrolled search path element vulnerability that could allow an authenticated local attacker to place a specially crafted DLL in a directory that the application searches, leading to arbitrary code execution with the priv","a":"","c":["CWE-427"],"u":[]},{"id":"CVE-2026-106931","v":"EG Secure Solutions","p":"SiteGuard Server Edition","n":"EG Secure Solutions SiteGuard Server Edition OS Command Injection Vulnerability","d":"2026-10-20","due":"2026-10-23","r":false,"s":"EG Secure Solutions SiteGuard Server Edition contains an OS command injection vulnerability which may allow an attacker to execute arbitrary OS commands with root or SYSTEM privileges on the system running the affected product.","a":"","c":["CWE-78"],"u":[]},{"id":"CVE-2026-102764","v":"BeyondTrust","p":"Remote Support","n":"BeyondTrust Remote Support Authentication Bypass by Spoofing Vulnerability","d":"2026-10-16","due":"2026-10-19","r":false,"s":"BeyondTrust Remote Support contains an authentication bypass by spoofing vulnerability that could allow a remote attacker to perform file operations on the appliance.","a":"","c":["CWE-290"],"u":[]},{"id":"CVE-2025-61624","v":"Fortinet","p":"Multiple Products","n":"Fortinet Multiple Products Path Traversal Vulnerability","d":"2026-10-16","due":"2026-10-19","r":false,"s":"FortiOS, FortiPAM, FortiProxy, and FortiSwitchManager contain a path traversal vulnerability that may allow an authenticated attacker with admin profile and at least read-write permissions to write or delete arbitrary files via specific CLI commands.","a":"","c":["CWE-22"],"u":[]},{"id":"CVE-2026-21589","v":"Atlassian","p":"Multiple Products","n":"Atlassian Multiple Products Files or Directories Accessible to External Parties Vulnerability","d":"2026-10-15","due":"2026-10-18","r":false,"s":"Multiple Atlassian products (Bitbucket Data Center ,Confluence Data Center, Jira Service Management Data Center, Jira Software Data Center, Bamboo Data Center, Crowd Data Center, Crucible and Fisheye) contain a files or directories accessible to external parti","a":"","c":["CWE-552"],"u":[]},{"id":"CVE-2026-76519","v":"Cisco","p":"Secure Email Gateway","n":"Cisco Secure Email Gateway Relative Path Traversal Vulnerability","d":"2026-10-14","due":"2026-10-17","r":false,"s":"Cisco Secure Email Gateway contains a relative path traversal vulnerability that could allow an unauthenticated, remote attacker to write arbitrary files on the underlying operating system.","a":"","c":["CWE-23"],"u":[]},{"id":"CVE-2026-105134","v":"Ahsay","p":"AhsayCBS","n":"Ahsay AhsayCBS Command Injection Vulnerability","d":"2026-10-14","due":"2026-10-17","r":false,"s":"Ahsay AhsayCBS contains a command injection vulnerability that could allow a remote attacker to execute operating system commands via manipulation of the random parameter in the Replication Receiver component’s /rps/api/json/UpdateReceivers.do endpoint. This v","a":"","c":["CWE-77","CWE-78"],"u":[]},{"id":"CVE-2026-105133","v":"Ahsay","p":"AhsayCBS","n":"Ahsay AhsayCBS Improper Authentication Vulnerability","d":"2026-10-14","due":"2026-10-17","r":false,"s":"Ahsay AhsayCBS contains an improper authentication vulnerability that could allow a remote attacker to bypass authentication via manipulation of the random parameter in the API component’s checkSysPwd function. This vulnerability can be chained with CVE-2026-1","a":"","c":["CWE-287"],"u":[]},{"id":"CVE-2026-0322","v":"Palo Alto Networks","p":"PAN-OS","n":"Palo Alto Networks PAN-OS Code Injection Vulnerability","d":"2026-10-14","due":"2026-10-17","r":false,"s":"Palo Alto Networks PAN-OS contains a code injection vulnerability that could allow an authenticated attacker with network access to execute arbitrary code with root privileges on the firewall.","a":"","c":["CWE-94"],"u":[]},{"id":"CVE-2026-96951","v":"Microsoft","p":"Windows","n":"Microsoft Windows Command Injection Vulnerability","d":"2026-10-13","due":"2026-10-16","r":false,"s":"Microsoft Windows Shell contains a command injection vulnerability that allows an unauthorized attacker to bypass a security feature over a network.","a":"","c":["CWE-77"],"u":[]},{"id":"CVE-2026-104935","v":"Ivanti","p":"Connect Secure","n":"Ivanti Connect Secure Authentication Bypass by Spoofing Vulnerability","d":"2026-10-13","due":"2026-10-16","r":false,"s":"Ivanti Connect Secure contains an authentication bypass by spoofing vulnerability that allows a remote unauthenticated attacker to execute arbitrary commands.","a":"","c":["CWE-290"],"u":[]},{"id":"CVE-2023-22894","v":"Strapi","p":"Strapi","n":"Strapi Cleartext Storage of Sensitive Information Vulnerability","d":"2026-10-08","due":"2026-10-11","r":false,"s":"Strapi contains a cleartext storage of sensitive information vulnerability that could allow attackers with access to the admin panel to discover sensitive user details via the query filter. The impacted product(s) could be end-of-life (EoL) and/or end-of-servi","a":"","c":["CWE-312"],"u":[]},{"id":"CVE-2021-3199","v":"ONLYOFFICE","p":"Docs","n":"ONLYOFFICE Docs Server Path Traversal Vulnerability","d":"2026-10-08","due":"2026-10-11","r":false,"s":"ONLYOFFICE Docs contains a path traversal vulnerability that can occur when JWT is used, via a /.. sequence in an image upload parameter and could allow for remote code execution.","a":"","c":["CWE-22"],"u":[]},{"id":"CVE-2016-3081","v":"Apache","p":"Struts","n":"Apache Struts Command Injection Vulnerability","d":"2026-10-08","due":"2026-10-11","r":false,"s":"Apache Struts contains a command injection vulnerability that could allow remote attackers to execute arbitrary code via method:prefix when Dynamic Method Invocation is enabled.","a":"","c":["CWE-77"],"u":[]},{"id":"CVE-2015-5477","v":"ISC","p":"BIND","n":"ISC BIND Data Processing Errors Vulnerability","d":"2026-10-08","due":"2026-10-11","r":false,"s":"ISC BIND contains a data processing errors vulnerability that could allow remote attackers to cause a denial of service via TKEY queries.","a":"","c":["CWE-19"],"u":[]}]};
+const KEV_URL="https://raw.githubusercontent.com/cisagov/kev-data/develop/known_exploited_vulnerabilities.json";
+const K={rows:[],daily:{},monthly:{},total:0,ransom:0,version:"",asOf:"",live:false,err:"",loading:false};
+function setKev(rows,daily,total,ransom,version,asOf,live){
+  K.rows=rows;K.daily=daily;K.total=total;K.ransom=ransom;K.version=version;K.asOf=asOf;K.live=live;K.monthly={};
+  for(const d in daily){const m=d.slice(0,7);K.monthly[m]=(K.monthly[m]||0)+daily[d];}
+  rows.forEach(r=>{r.hay=norm([r.id,r.v,r.p,r.n,r.s].join(" "));});
+}
+async function loadLive(){
+  K.loading=true;K.err="";renderKStatus();
+  const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),25000);
+  try{
+    const r=await fetch(KEV_URL,{signal:ctl.signal,cache:"no-store",referrerPolicy:"no-referrer",credentials:"omit"});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const d=await r.json();
+    if(!d||!Array.isArray(d.vulnerabilities)) throw new Error("formato inesperado");
+    const str=(x,n)=>String(x==null?"":x).slice(0,n),rows=[],daily={};let ransom=0;
+    for(const v of d.vulnerabilities){
+      const id=str(v.cveID,30),dd=str(v.dateAdded,10);
+      if(!/^CVE-\d{4}-\d{4,}$/.test(id)||!/^\d{4}-\d{2}-\d{2}$/.test(dd)) continue;
+      const isR=v.knownRansomwareCampaignUse==="Known"; if(isR) ransom++;
+      if(dd>="2025-01-01") daily[dd]=(daily[dd]||0)+1;
+      rows.push({id,v:str(v.vendorProject,80),p:str(v.product,80),n:str(v.vulnerabilityName,200),d:dd,
+        due:/^\d{4}-\d{2}-\d{2}$/.test(v.dueDate||"")?v.dueDate:"",r:isR,s:str(v.shortDescription,1200),a:str(v.requiredAction,600),
+        c:Array.isArray(v.cwes)?v.cwes.slice(0,5).map(x=>str(x,20)):[],
+        u:String(v.notes||"").split(";").map(x=>x.trim()).filter(x=>/^https:\/\/\S+$/.test(x)).slice(0,4)});
+    }
+    if(rows.length<100) throw new Error("catálogo incompleto");
+    rows.sort((a,b)=>a.d<b.d?1:a.d>b.d?-1:a.id<b.id?1:-1);
+    setKev(rows,daily,rows.length,ransom,str(d.catalogVersion,20),str(d.dateReleased,10),true);
+  }catch(e){K.err=(e&&e.name==="AbortError")?"tiempo de espera agotado":String((e&&e.message)||e).slice(0,80);}
+  finally{clearTimeout(to);K.loading=false;}
+  refreshAll();
+}
+function renderKStatus(){
+  const el=$("#kStatus");el.replaceChildren();
+  if(K.loading){el.append("⏳ Cargando catálogo CISA KEV en vivo…");return;}
+  if(K.live){el.append(h("span",{class:"ok",text:"● En vivo"})," · CISA KEV v"+K.version+" · "+fmtN(K.total)+" CVE · fuente: GitHub cisagov/kev-data");}
+  else{
+    el.append(h("span",{class:"bad",text:"● Snapshot embebido"})," del "+K.asOf+" (v"+K.version+")"+(K.err?" · feed en vivo no disponible: "+K.err:"")+" · solo las 60 entradas más recientes.");
+    const b=h("button",{class:"toggle",type:"button",text:"Reintentar"});b.addEventListener("click",loadLive);el.append(b);
+  }
+}
+function renderKStats(){
+  const box=$("#kStats");box.replaceChildren();
+  const tod=ymdOf(todayUTC()),cut=ymdOf(todayUTC()-30*DAY),soon=ymdOf(todayUTC()+7*DAY);
+  let a30=0;for(const d in K.daily) if(d>=cut) a30+=K.daily[d];
+  const due=K.rows.filter(r=>r.due&&r.due>=tod&&r.due<=soon).length;
+  [["KEV totales",fmtN(K.total),""],["Añadidas 30 d",fmtN(a30),""],["Uso en ransomware",fmtN(K.ransom),"crit"],["Vencen ≤ 7 d",fmtN(due),""]]
+    .forEach(([l,n,c])=>box.append(h("div",{class:"stat "+c},h("b",{text:n}),h("small",{text:l}))));
+}
+
+/* ---------- tabla del tracker ---------- */
+const KS={q:"",range:"90",ransom:false,sort:"d-desc",shown:40};
+function kFiltered(){
+  const cut=KS.range==="all"?"":ymdOf(todayUTC()-(+KS.range)*DAY),words=KS.q?KS.q.split(/\s+/):[];
+  const l=K.rows.filter(r=>(!cut||r.d>=cut)&&(!KS.ransom||r.r)&&words.every(w=>r.hay.includes(w)));
+  const s=KS.sort;
+  l.sort((a,b)=>s==="d-asc"?(a.d<b.d?-1:a.d>b.d?1:a.id<b.id?-1:1)
+    :s==="due-asc"?((a.due||"9999")<(b.due||"9999")?-1:(a.due||"9999")>(b.due||"9999")?1:0)
+    :s==="v-asc"?a.v.localeCompare(b.v)
+    :(a.d<b.d?1:a.d>b.d?-1:a.id<b.id?1:-1));
+  return l;
+}
+function kRow(r){
+  const nvd="https://nvd.nist.gov/vuln/detail/"+r.id;
+  const sum=h("summary",{class:"krow"},
+    h("span",{class:"kid",text:r.id}),
+    h("span",{class:"kmain"},h("b",{text:r.v+" · "+r.p}),h("small",{text:r.n})),
+    h("span",{class:"kdates"},h("span",{text:"añadida "+r.d}),r.due?h("span",{class:"kdue",text:"límite "+r.due}):null),
+    r.r?h("span",{class:"tag critical",text:"Ransomware"}):null);
+  const links=[h("li",{},link("NVD · "+r.id,nvd))].concat((r.u||[]).map((u,i)=>h("li",{},link("Referencia "+(i+1),u))));
+  const body=h("div",{class:"kbody more"},
+    h("div",{class:"blk"},h("h3",{text:"// Descripción"}),h("p",{text:r.s||"—"})),
+    r.a?h("div",{class:"blk les"},h("h3",{text:"// Acción requerida (CISA)"}),h("p",{text:r.a})):null,
+    h("div",{class:"blk"},h("h3",{text:"// Enlaces"+(r.c&&r.c.length?" · "+r.c.join(", "):"")}),h("ul",{},links)));
+  return h("details",{class:"kitem"},sum,body);
+}
+function renderK(){
+  const l=kFiltered(),box=$("#kList");box.replaceChildren();
+  $("#kCount").textContent=fmtN(l.length)+" CVE"+(K.live?"":" (snapshot parcial)");
+  if(!l.length){box.append(h("div",{class:"empty",text:"> sin resultados · prueba otro filtro"}));$("#kMore").hidden=true;return;}
+  l.slice(0,KS.shown).forEach(r=>box.append(kRow(r)));
+  $("#kMore").hidden=l.length<=KS.shown;
+}
+[["30","30 días"],["90","90 días"],["365","1 año"],["all","Todo"]].forEach(([v,l])=>{
+  const b=h("button",{class:"chip",type:"button","aria-pressed":v===KS.range?"true":"false",text:l});
+  b.addEventListener("click",()=>{KS.range=v;KS.shown=40;$("#kRange").querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",String(c===b)));renderK();});
+  $("#kRange").append(b);
+});
+let kt;$("#kq").addEventListener("input",e=>{clearTimeout(kt);kt=setTimeout(()=>{KS.q=norm(e.target.value.trim());KS.shown=40;renderK();},150);});
+$("#kSort").addEventListener("change",e=>{KS.sort=e.target.value;KS.shown=40;renderK();});
+$("#kRans").addEventListener("change",e=>{KS.ransom=e.target.checked;KS.shown=40;renderK();});
+$("#kMore").addEventListener("click",()=>{KS.shown+=40;renderK();});
+$("#kCsv").addEventListener("click",()=>{
+  const esc=v=>{let s=String(v==null?"":v);if(/^[=+\-@\t\r]/.test(s)) s="'"+s;return '"'+s.replace(/"/g,'""')+'"';};
+  const rows=kFiltered();
+  const csv=["cveID,vendor,product,vulnerabilityName,dateAdded,dueDate,knownRansomwareCampaignUse,shortDescription,nvdUrl"]
+    .concat(rows.map(r=>[r.id,r.v,r.p,r.n,r.d,r.due,r.r?"Known":"Unknown",r.s,"https://nvd.nist.gov/vuln/detail/"+r.id].map(esc).join(","))).join("\r\n");
+  const a=h("a",{href:URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"})),download:"cisa-kev-"+ymdOf(Date.now())+".csv"});
+  document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+});
+
+/* ---------- pestañas y navegación ---------- */
+function showTab(name){
+  document.querySelectorAll(".tab").forEach(b=>{const on=b.dataset.tab===name;b.setAttribute("aria-selected",String(on));b.tabIndex=on?0:-1;});
+  document.querySelectorAll(".panel").forEach(p=>{p.hidden=p.id!=="p-"+name;});
+}
+const tabs=[...document.querySelectorAll(".tab")];
+tabs.forEach((b,i)=>{
+  b.addEventListener("click",()=>showTab(b.dataset.tab));
+  b.addEventListener("keydown",e=>{
+    if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft") return;
+    const n=tabs[(i+(e.key==="ArrowRight"?1:-1)+tabs.length)%tabs.length];showTab(n.dataset.tab);n.focus();e.preventDefault();
+  });
+});
+function focusEvent(i){
+  showTab("timeline");
+  S.cat=S.sev=S.year="all";S.q="";$("#q").value="";
+  document.querySelectorAll("#catRow .chip,#sevRow .chip,#yearRow .chip").forEach(c=>c.setAttribute("aria-pressed",String(c.dataset.v==="all")));
+  open.add(i);render();
+  const li=document.getElementById("ev"+i)&&document.getElementById("ev"+i).closest("li");
+  if(li){li.scrollIntoView({behavior:"smooth",block:"center"});const b=li.querySelector(".cardbtn");if(b)b.focus({preventScroll:true});li.classList.add("flash");setTimeout(()=>li.classList.remove("flash"),1800);}
+}
+function focusOutages(){showTab("outages");$("#p-outages").scrollIntoView({behavior:"smooth",block:"start"});}
+
+/* ---------- gráfico SVG ---------- */
+const C={range:"12M",mode:"count",layers:{crit:true,other:false,out:true}};
+const SVGNS="http://www.w3.org/2000/svg";
+function sv(tag,attrs,txt){const el=document.createElementNS(SVGNS,tag);for(const k in attrs||{})el.setAttribute(k,attrs[k]);if(txt!=null)el.textContent=txt;return el;}
+function niceMax(v){const steps=[1,2,5,10,20,25,50,100,200,250,500,1000,2000,2500,5000,10000];const need=Math.max(1,v)/4;for(const s of steps) if(s>=need) return s*4;return Math.ceil(need)*4;}
+function buildSlots(){
+  const n=new Date(),today=todayUTC(),out=[];
+  if(C.range==="90D"){
+    for(let i=89;i>=0;i--){const t=today-i*DAY,k=ymdOf(t);out.push({t0:t,t1:t+DAY,key:k,lab:k.slice(8)+"/"+k.slice(5,7),daily:true,name:k});}
+    return out;
+  }
+  const y=n.getUTCFullYear(),m=n.getUTCMonth();let sy=2025,sm=0;
+  if(C.range==="12M"){sy=y;sm=m-11;if(sm<0){sm+=12;sy--;}}
+  for(let yy=sy,mm=sm;yy<y||(yy===y&&mm<=m);){
+    const k=yy+"-"+pad2(mm+1);
+    out.push({t0:Date.UTC(yy,mm,1),t1:Date.UTC(yy,mm+1,1),key:k,lab:MONTHS[mm]+" "+String(yy).slice(2),daily:false,name:MONTHS[mm]+" "+yy});
+    mm++;if(mm>11){mm=0;yy++;}
+  }
+  return out;
+}
+const tip=$("#tip"),wrap=$("#chartWrap");
+function showTip(text,cx,cy){
+  tip.textContent=text;tip.hidden=false;
+  const r=wrap.getBoundingClientRect();
+  let x=cx-r.left+12,y=cy-r.top-tip.offsetHeight-12;
+  if(x+tip.offsetWidth>r.width) x=r.width-tip.offsetWidth;
+  if(x<0) x=0; if(y<0) y=cy-r.top+16;
+  tip.style.left=x+"px";tip.style.top=y+"px";
+}
+const hideTip=()=>{tip.hidden=true;};
+function drawChart(){
+  const svg=$("#chart"),W=Math.max(300,Math.floor(wrap.clientWidth||640)),sl=buildSlots(),n=sl.length;
+  let vals=sl.map(s=>s.daily?(K.daily[s.key]||0):(K.monthly[s.key]||0));
+  const raw=vals.slice();
+  if(C.mode==="cum"){let a=0;vals=vals.map(v=>(a+=v));}
+  const yMax=niceMax(Math.max(1,...vals)),t0=sl[0].t0,t1=sl[n-1].t1,padL=38,padR=10,padB=30,plotH=190;
+  const xT=t=>padL+(t-t0)/(t1-t0)*(W-padL-padR);
+  const pins=EVENTS.filter(e=>{const t=T(e.ymd);return t>=t0&&t<t1&&((e.sev==="critical"&&C.layers.crit)||(e.sev!=="critical"&&C.layers.other));})
+    .sort((a,b)=>a.ymd<b.ymd?-1:a.ymd>b.ymd?1:0);
+  const lastX=[];
+  pins.forEach(e=>{const x=xT(T(e.ymd));let l=0;while(lastX[l]!==undefined&&x-lastX[l]<19) l++;lastX[l]=x;e._x=x;e._l=l;});
+  const lanes=pins.length?Math.max(...pins.map(e=>e._l))+1:0,padT=14+lanes*20,H=padT+plotH+padB,base=padT+plotH;
+  const yV=v=>base-(v/yMax)*plotH;
+  svg.replaceChildren();svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.setAttribute("width",W);svg.setAttribute("height",H);
+  for(let k=0;k<=4;k++){
+    const v=yMax*k/4,y=yV(v);
+    svg.append(sv("line",{class:k?"gridl":"axl",x1:padL,x2:W-padR,y1:y,y2:y}));
+    svg.append(sv("text",{class:"ax",x:padL-6,y:y+3,"text-anchor":"end"},Number.isInteger(v)?fmtN(v):v.toFixed(1)));
+  }
+  if(C.mode==="cum"){
+    let d="M"+xT(sl[0].t0)+","+base;
+    sl.forEach((s,i)=>{d+=" L"+xT(s.t0)+","+yV(vals[i])+" L"+xT(s.t1)+","+yV(vals[i]);});
+    svg.append(sv("path",{class:"area",d:d+" L"+xT(t1)+","+base+" Z"}));
+    svg.append(sv("path",{class:"line",d:d.replace("M"+xT(sl[0].t0)+","+base+" L","M")}));
+  }
+  sl.forEach((s,i)=>{
+    const x0=xT(s.t0),x1=xT(s.t1),w=Math.max(1,x1-x0-(s.daily?0.6:2));
+    if(C.mode==="count"&&raw[i]>0) svg.append(sv("rect",{class:"bar"+(i===n-1?" now":""),x:x0+1,y:yV(vals[i]),width:w,height:base-yV(vals[i]),rx:1.5}));
+    const tp=s.name+": "+fmtN(raw[i])+" CVE añadidos a KEV"+(C.mode==="cum"?" · acumulado "+fmtN(vals[i]):"")+(i===n-1?" (período en curso)":"");
+    svg.append(sv("rect",{class:"hit",x:x0,y:padT,width:Math.max(1,x1-x0),height:plotH,"data-tip":tp}));
+  });
+  const maxLab=Math.max(2,Math.floor((W-padL)/46)),step=Math.ceil(n/maxLab);
+  sl.forEach((s,i)=>{if((n-1-i)%step===0) svg.append(sv("text",{class:"ax",x:(xT(s.t0)+xT(s.t1))/2,y:base+16,"text-anchor":"middle"},s.lab));});
+  pins.forEach(e=>{
+    const cy=14+e._l*20,t=sv("title",{},"");
+    svg.append(sv("line",{class:"stem "+e.sev,x1:e._x,x2:e._x,y1:cy+8,y2:base}));
+    const g=sv("g",{class:"pin "+(e.sev==="critical"?"crit":e.sev),tabindex:"0",role:"button","aria-label":"Incidente "+e.num+": "+e.title,
+      "data-tip":"#"+e.num+" · "+fmtDate(e.date)+(e.approx?" (fecha aprox.)":" · "+e.ymd.slice(8)+"/"+e.ymd.slice(5,7))+"\n"+e.title+" — "+SEV[e.sev],"data-ev":String(e.i)});
+    g.append(sv("circle",{cx:e._x,cy:cy,r:8}),sv("text",{x:e._x,y:cy},String(e.num)));
+    svg.append(g);
+  });
+  if(C.layers.out){
+    const groups={};
+    OUTAGES.forEach(o=>{const t=T(o.ymd);for(let i=0;i<n;i++) if(t>=sl[i].t0&&t<sl[i].t1){(groups[i]=groups[i]||[]).push(o);break;}});
+    Object.keys(groups).forEach(i=>{
+      const g=groups[i],x=g.reduce((a,o)=>a+xT(T(o.ymd)),0)/g.length,y=base;
+      const m=sv("g",{class:"out",tabindex:"0",role:"button","aria-label":"Caídas de sistema: "+g.map(o=>o.ent).join(", "),"data-out":"1",
+        "data-tip":"Caídas ("+g.length+"): "+g.map(o=>o.ent).join(", ")});
+      m.append(sv("path",{d:"M"+x+","+(y-8)+" l7,8 l-7,8 l-7,-8 z"}));
+      if(g.length>1) m.append(sv("text",{x:x,y:y-12},String(g.length)));
+      svg.append(m);
+    });
+  }
+  const pl=$("#pinList");pl.replaceChildren();
+  pins.forEach(e=>{
+    const b=h("button",{class:"chip pinchip",type:"button","data-sev":e.sev==="critical"?"critical":e.sev},h("b",{text:String(e.num)}),short(e.title));
+    b.addEventListener("click",()=>focusEvent(e.i));pl.append(b);
+  });
+}
+$("#chart").addEventListener("pointermove",e=>{const t=e.target.closest("[data-tip]");if(t) showTip(t.getAttribute("data-tip"),e.clientX,e.clientY);else hideTip();});
+$("#chart").addEventListener("pointerleave",hideTip);
+$("#chart").addEventListener("focusin",e=>{const t=e.target.closest("[data-tip]");if(t){const r=t.getBoundingClientRect();showTip(t.getAttribute("data-tip"),r.left+r.width/2,r.top);}});
+$("#chart").addEventListener("focusout",hideTip);
+function chartAct(t){
+  const ev=t.closest("[data-ev]");if(ev){focusEvent(+ev.getAttribute("data-ev"));return;}
+  if(t.closest("[data-out]")) focusOutages();
+}
+$("#chart").addEventListener("click",e=>chartAct(e.target));
+$("#chart").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();chartAct(e.target);}});
+tip.style.whiteSpace="pre-line";
+function chipRow(rowId,items,get,set,multi){
+  const row=$(rowId);
+  items.forEach(([v,l])=>{
+    const b=h("button",{class:"chip",type:"button","aria-pressed":String(get(v)),text:l});
+    b.addEventListener("click",()=>{set(v);row.querySelectorAll(".chip").forEach((c,i)=>c.setAttribute("aria-pressed",String(get(items[i][0]))));drawChart();});
+    row.append(b);
+  });
+}
+chipRow("#cRange",[["90D","90 días"],["12M","12 meses"],["ALL","2025–2026"]],v=>C.range===v,v=>{C.range=v;});
+chipRow("#cMode",[["count","Nuevos"],["cum","Acumulado"]],v=>C.mode===v,v=>{C.mode=v;});
+chipRow("#cLayers",[["crit","Hackeos críticos"],["other","High / Medium"],["out","Caídas de sistema"]],v=>C.layers[v],v=>{C.layers[v]=!C.layers[v];});
+let rz;window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(drawChart,120);});
+
+function refreshAll(){drawChart();renderKStats();renderKStatus();renderK();}
+setKev(KEV_SNAP.rows,KEV_SNAP.daily,KEV_SNAP.total,KEV_SNAP.ransom,KEV_SNAP.version,KEV_SNAP.asOf,false);
+renderOut();refreshAll();loadLive();
 </script>
 </body>
 </html>
