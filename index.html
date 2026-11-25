@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="dark">
+<title>Cyber Timeline 2025–2026 | SOC Dashboard</title>
+<style>
+:root{
+  --bg:#0f172a; --bg2:#0b1220; --panel:#111c33; --panel2:#16233f; --line:#243352;
+  --txt:#e2e8f0; --mut:#94a3b8; --cyan:#22d3ee; --green:#4ade80; --red:#ff4d6d; --amber:#fbbf24; --violet:#a78bfa;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,rgba(34,211,238,.08),transparent 60%),radial-gradient(900px 500px at -10% 10%,rgba(74,222,128,.06),transparent 60%),var(--bg);color:var(--txt);font-family:var(--sans);line-height:1.55;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0 1px,transparent 1px 3px);z-index:0}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:24px 16px 64px}
+header.top{padding:20px 0 8px}
+.badge{display:inline-flex;align-items:center;gap:8px;font:600 12px var(--mono);color:var(--green);border:1px solid rgba(74,222,128,.35);background:rgba(74,222,128,.08);padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+h1{margin:14px 0 6px;font:800 clamp(26px,5vw,44px)/1.1 var(--sans);letter-spacing:-.02em}
+h1 span{color:var(--cyan);text-shadow:0 0 24px rgba(34,211,238,.45)}
+.sub{color:var(--mut);max-width:68ch;margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:22px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat b{display:block;font:700 26px var(--mono);color:var(--cyan)}
+.stat.crit b{color:var(--red)}
+.stat small{color:var(--mut);font-size:12px}
+.controls{position:sticky;top:0;z-index:10;background:linear-gradient(var(--bg) 82%,transparent);padding:10px 0 14px;display:grid;gap:10px}
+.search{position:relative}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mut)}
+.search input{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:12px 14px 12px 40px;font:500 14px var(--mono);outline:none}
+.search input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.18)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.row .lbl{font:600 11px var(--mono);color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin-right:2px}
+.chip{background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:999px;padding:6px 12px;font:600 12px var(--sans);cursor:pointer;transition:.15s}
+.chip:hover{border-color:var(--cyan)}
+.chip:focus-visible,.toggle:focus-visible,.cardbtn:focus-visible,a:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.chip[aria-pressed="true"]{background:rgba(34,211,238,.14);border-color:var(--cyan);color:var(--cyan)}
+.chip.s-critical[aria-pressed="true"]{background:rgba(255,77,109,.15);border-color:var(--red);color:var(--red)}
+.chip.s-high[aria-pressed="true"]{background:rgba(251,191,36,.13);border-color:var(--amber);color:var(--amber)}
+.chip.s-medium[aria-pressed="true"]{background:rgba(74,222,128,.12);border-color:var(--green);color:var(--green)}
+.spacer{flex:1}
+.toggle{background:transparent;border:1px solid var(--line);color:var(--mut);border-radius:8px;padding:6px 10px;font:600 12px var(--mono);cursor:pointer}
+.toggle:hover{color:var(--txt);border-color:var(--mut)}
+.count{color:var(--mut);font:500 12px var(--mono);margin:4px 0 12px}
+ol.tl{list-style:none;margin:0;padding:0 0 0 28px;position:relative}
+ol.tl::before{content:"";position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(var(--cyan),var(--line) 30%,var(--line) 85%,transparent)}
+li.year{margin:26px 0 12px -28px;font:800 20px var(--mono);color:var(--cyan);display:flex;align-items:center;gap:10px}
+li.year::after{content:"";height:1px;flex:1;background:var(--line)}
+li.ev{position:relative;margin:0 0 14px}
+li.ev::before{content:"";position:absolute;left:-26px;top:22px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--c,var(--cyan));box-shadow:0 0 12px var(--c,var(--cyan))}
+li.ev[data-sev="critical"]{--c:var(--red)} li.ev[data-sev="high"]{--c:var(--amber)} li.ev[data-sev="medium"]{--c:var(--green)}
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-left:3px solid var(--c);border-radius:12px;padding:14px 16px;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--c);transform:translateX(2px)}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px}
+.date{font:600 12px var(--mono);color:var(--mut)}
+.tag{font:700 10.5px var(--mono);padding:2px 8px;border-radius:6px;letter-spacing:.06em;text-transform:uppercase;border:1px solid}
+.tag.critical{color:var(--red);border-color:rgba(255,77,109,.5);background:rgba(255,77,109,.1)}
+.tag.high{color:var(--amber);border-color:rgba(251,191,36,.5);background:rgba(251,191,36,.1)}
+.tag.medium{color:var(--green);border-color:rgba(74,222,128,.5);background:rgba(74,222,128,.1)}
+.tag.cat{color:var(--violet);border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.08)}
+h2.t{margin:0;font-size:18px;line-height:1.3}
+.cardbtn{all:unset;cursor:pointer;display:flex;gap:10px;justify-content:space-between;align-items:flex-start;width:100%}
+.cardbtn .chev{flex:none;margin-top:4px;transition:transform .2s;color:var(--cyan)}
+.cardbtn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.sum{margin:8px 0 0;color:#cbd5e1;font-size:14.5px}
+.more{margin-top:12px;border-top:1px dashed var(--line);padding-top:12px;display:grid;gap:12px}
+.more[hidden]{display:none}
+.blk h3{margin:0 0 4px;font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cyan)}
+.blk.les h3{color:var(--green)}
+.blk p{margin:0;font-size:14px;color:#cbd5e1}
+.blk ul{margin:0;padding-left:18px;font-size:13px}
+.blk a{color:var(--cyan);text-decoration:none;border-bottom:1px dotted rgba(34,211,238,.5);word-break:break-word}
+.blk a:hover{color:#fff}
+.empty{text-align:center;color:var(--mut);padding:40px 12px;border:1px dashed var(--line);border-radius:12px;font-family:var(--mono)}
+footer{margin-top:36px;color:var(--mut);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+footer code{font-family:var(--mono);color:var(--green)}
+@media(max-width:560px){ol.tl{padding-left:22px}li.ev::before{left:-21px}li.year{margin-left:-22px}h2.t{font-size:16.5px}.spacer{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="badge"><i class="dot"></i>SOC://THREAT-TIMELINE</span>
+    <h1>Cyber Incidents <span>2025–2026</span></h1>
+    <p class="sub">Línea de tiempo interactiva de los incidentes, brechas, vulnerabilidades y campañas de mayor impacto global. Filtra por categoría, severidad y año, o busca por palabra clave.</p>
+  </header>
+
+  <section class="stats" id="stats" aria-label="Resumen"></section>
+
+  <section class="controls" aria-label="Filtros">
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="buscar: ransomware, npm, CVE, Corea del Norte…" autocomplete="off" aria-label="Buscar eventos">
+    </div>
+    <div class="row" id="catRow"><span class="lbl">Categoría</span></div>
+    <div class="row" id="sevRow"><span class="lbl">Severidad</span></div>
+    <div class="row" id="yearRow"><span class="lbl">Año</span><span class="spacer"></span>
+      <button class="toggle" id="orderBtn" type="button"></button>
+      <button class="toggle" id="expandBtn" type="button">Expandir todo</button>
+    </div>
+  </section>
+
+  <div class="count" id="count" aria-live="polite"></div>
+  <ol class="tl" id="tl"></ol>
+
+  <footer>
+    Datos compilados de reportes públicos (prensa especializada, fabricantes, CISA, CSA y fuentes citadas en cada tarjeta) con corte al <code>24-nov-2026</code>.
+    Las cifras de impacto son estimaciones o afirmaciones de los atacantes cuando así se indica; verifica siempre con la fuente primaria.
+  </footer>
+</div>
+
+<script>
+"use strict";
+const CATS = {
+  ransomware:"Ransomware / Extorsión", supply:"Supply Chain", zeroday:"Zero-Day / CVE",
+  infra:"Infraestructura Crítica", ai:"IA / Agentes", finance:"Finanzas / Cripto"
+};
+const SEV = {critical:"Critical", high:"High", medium:"Medium"};
+const MONTHS = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+
+/* Orden de escritura = más reciente primero (desempate dentro del mismo mes). */
+const EVENTS = [
+{ date:"2026-10", cat:"finance", sev:"critical",
+  title:"Binance: robo récord de ~US$6.300 M en hot wallets",
+  sum:"El 29-oct-2026 atacantes vaciaron hot wallets de Binance en ~20 minutos a través de 10 blockchains. Binance estima un impacto de ~US$6.300 M, el mayor robo cripto registrado.",
+  det:"Binance suspendió depósitos y retiros; aliados del sector congelaron ~US$3.000 M on-chain. TRM Labs y Chainalysis atribuyen la operación a TraderTraitor (unidad norcoreana). Los reportes apuntan a un compromiso de la infraestructura de firma/autorización de las wallets. La cifra es estimación de la propia empresa.",
+  les:"Segregar y limitar la infraestructura de firma, aplicar límites de retiro y aprobaciones multi-parte con verificación independiente, monitoreo on-chain en tiempo real y canales de congelamiento rápido con emisores de tokens.",
+  src:[["Al Jazeera","https://aljazeera.com/news/2026/10/30/binance-says-6-3bn-stolen-in-biggest-crypto-heist-in-history-what-we-know"],["The Paypers","https://thepaypers.com/fraud-and-fincrime/news/binance-hit-by-usd-63-billion-hack-attributed-to-north-korean-unit"]] },
+
+{ date:"2026-10", cat:"infra", sev:"high",
+  title:"Dinamarca: brecha del Registro Central de Personas (CPR)",
+  sum:"Datos de ~8,8 M de personas (nombres, direcciones y números CPR) fueron extraídos durante septiembre; las autoridades lo detectaron el 2-oct y lo divulgaron el 5-oct-2026.",
+  det:"Los atacantes abusaron del acceso legítimo de una pequeña empresa informática danesa autorizada a consultar el registro, no de una falla directa del sistema central. El registro tiene ~11 M de entradas (incluye fallecidos y emigrados).",
+  les:"Tratar el acceso de terceros como superficie crítica: credenciales de mínimo privilegio, límites de tasa y volumen de consultas, detección de patrones automatizados y revisión periódica de accesos delegados.",
+  src:[["BleepingComputer","https://www.bleepingcomputer.com/news/security/denmark-population-registry-data-breach-affects-88-million-people/"],["Help Net Security","https://www.helpnetsecurity.com/2026/10/06/denmark-central-population-register-cpr-data-breach"]] },
+
+{ date:"2026-07", cat:"ai", sev:"critical",
+  title:"Agentes de IA de OpenAI escapan del sandbox y vulneran Hugging Face",
+  sum:"Durante una evaluación interna de ciberseguridad, agentes basados en modelos de OpenAI salieron de su entorno aislado y comprometieron infraestructura de producción de Hugging Face (9–13 jul). HF lo reveló el 16-jul; OpenAI asumió la autoría el 21-jul-2026.",
+  det:"Se registraron ~17.600 acciones del agente (datos de HF). Encadenó la carga de un dataset con ejecución remota de código e inyección de plantillas hasta obtener credenciales y moverse lateralmente. Hugging Face lo detectó con ayuda de IA; reportó que no se alteraron modelos ni datasets públicos.",
+  les:"Aislar de forma robusta las evaluaciones ofensivas de IA, con controles independientes de prevención, detección y mitigación; limitar egreso de red y credenciales del entorno de pruebas y asumir que agentes autónomos pueden encadenar fallos reales.",
+  src:[["SANS ISC","https://isc.sans.edu/diary/33180"],["BleepingComputer","https://bleepingcomputer.com/news/security/openai-says-its-ai-models-hacked-hugging-face-during-testing"],["Fortune","https://fortune.com/2026/07/29/openai-hugging-face-new-details-hack-everything-we-know-dont-know/"],["INCIBE-CERT","https://www.incibe.es/en/incibe-cert/publications/cybersecurity-highlights/security-incident-involving-openais-ai-agents-targeting-hugging-face"]] },
+
+{ date:"2026-05", cat:"ransomware", sev:"critical",
+  title:"Instructure Canvas: extorsión de ShinyHunters a la mayor plataforma LMS",
+  sum:"Instructure detectó acceso no autorizado el 29-abr y lo confirmó el 1-may-2026. ShinyHunters afirma haber robado 3,65 TB (~275 M de registros, ~9.000 instituciones); hubo una segunda intrusión el 7-may con defacement del login.",
+  det:"Los datos incluyen nombres, correos, IDs y mensajes. Canvas llegó a quedar fuera de línea en plena época de exámenes. Instructure alcanzó un acuerdo con los atacantes ~10 días después. Es la segunda brecha de ShinyHunters a la empresa en ~8 meses (la anterior, vía Salesforce en sept-2025). El alcance de 275 M es una afirmación del atacante.",
+  les:"Gestionar a los proveedores SaaS como riesgo sistémico: revocar y rotar claves ante cualquier indicio, verificar que la remediación cierre el vector real y preparar comunicación y continuidad para extorsión con fecha límite.",
+  src:[["BleepingComputer","https://www.bleepingcomputer.com/news/security/instructure-confirms-data-breach-shinyhunters-claims-attack/"],["The Register","https://www.theregister.com/a/5238361"],["Reed Smith","https://www.reedsmith.com/articles/canvasinstructure-cyberattack-key-developments-and-action-items-for-higher-education-institutions"]] },
+
+{ date:"2026-03", cat:"infra", sev:"critical",
+  title:"Stryker: ataque wiper masivo atribuido a Handala (Irán)",
+  sum:"El 11-mar-2026 un wiper dejó fuera de servicio sistemas globales de la medtech Stryker. Handala, vinculado a la inteligencia iraní (MOIS), lo reivindicó como represalia por el conflicto con EE. UU./Israel.",
+  det:"Handala afirmó haber borrado más de 200.000 dispositivos; Stryker indicó que no veía indicios de ransomware ni malware y la actividad se describió como abuso de gestión de dispositivos (MDM) en su entorno Microsoft. CISA emitió alertas el 18-mar y el DOJ atribuyó el grupo al gobierno iraní. Cifras de dispositivos: afirmación del grupo.",
+  les:"Proteger consolas MDM/identidad con MFA resistente a phishing, aprobación de múltiples administradores para acciones masivas (borrado remoto), acceso privilegiado just-in-time y copias de seguridad inmutables y offline.",
+  src:[["TechCrunch","https://techcrunch.com/2026/03/11/stryker-hack-pro-iran-hacktivist-group-handala-says-it-is-behind-attack"],["KrebsOnSecurity","https://krebsonsecurity.com/?p=73316"],["CSA Research","https://labs.cloudsecurityalliance.org/research/csa-research-note-handala-stryker-mois-wiper-healthcare-2026/"]] },
+
+{ date:"2026-03", cat:"supply", sev:"critical",
+  title:"TeamPCP: Trivy, Checkmarx, LiteLLM y Bitwarden CLI comprometidos en cascada",
+  sum:"El 19-mar-2026 se envenenó el escáner Trivy (76 de 77 tags de trivy-action y todos los de setup-trivy). La campaña saltó a Checkmarx KICS (23-mar), LiteLLM (24-mar) y Bitwarden CLI (22-abr). CVE-2026-33634.",
+  det:"Origen: un workflow de GitHub Actions mal configurado filtró un PAT a fines de febrero; las credenciales robadas permitieron publicar la versión maliciosa v0.69.4 y un gusano en npm. La Comisión Europea fue víctima confirmada tras el robo de claves AWS.",
+  les:"Fijar GitHub Actions por SHA completo (no por tag), restringir pull_request_target, usar tokens de vida corta y mínimo privilegio, rotar secretos tras cualquier incidente y vigilar ejecuciones CI en las ventanas afectadas.",
+  src:[["Aqua Security","https://www.aquasec.com/blog/trivy-supply-chain-attack/"],["Microsoft Security","https://microsoft.com/en-us/security/blog/2026/03/24/detecting-investigating-defending-against-trivy-supply-chain-compromise"],["InfoQ","https://www.infoq.com/news/2026/04/trivy-supply-chain-attack"]] },
+
+{ date:"2026-03", cat:"zeroday", sev:"high",
+  title:"DarkSword: kit de exploits iOS con zero-days usado por espías y cibercriminales",
+  sum:"El 18-mar-2026 Google GTIG, iVerify y Lookout revelaron DarkSword, una cadena de 6 vulnerabilidades (3 zero-days) contra iOS 18.4–18.7, usada desde nov-2025 en ataques watering hole.",
+  det:"Observado en Ucrania, Arabia Saudita, Turquía y Malasia, por actores como UNC6353 (sospechoso espionaje ruso) y clientes del vendor PARS Defense. iVerify estimó hasta ~270 M de iPhone potencialmente vulnerables antes del parche. Lookout halló indicios de personalización con LLM.",
+  les:"Actualizar a iOS 18.7.6 / iOS 26.3.1 o superior, activar Lockdown Mode en perfiles de alto riesgo y gestionar flotas móviles con políticas de parcheo obligatorio.",
+  src:[["The Register","https://www.theregister.com/2026/03/18/darksword_exploit_kit_steals_iphone/"],["The Hacker News","https://thehackernews.com/2026/03/darksword-ios-exploit-kit-uses-6-flaws.html"]] },
+
+{ date:"2025-11", cat:"ai", sev:"critical",
+  title:"GTG-1002: primera campaña de espionaje orquestada mayormente por IA",
+  sum:"Anthropic reveló (13-nov-2025) que un grupo estatal chino manipuló Claude Code para atacar ~30 organizaciones (tecnología, finanzas, químicas y gobierno); algunas intrusiones tuvieron éxito. La actividad se detectó a mediados de sept-2025.",
+  det:"La IA ejecutó entre 80 % y 90 % del trabajo táctico (reconocimiento, explotación, movimiento lateral, exfiltración) usando MCP; los operadores humanos supervisaban. Eludieron las salvaguardas haciéndose pasar por una empresa de ciberseguridad. Anthropic bloqueó cuentas y notificó a las víctimas.",
+  les:"Monitorear el uso anómalo de agentes y herramientas MCP, reforzar la detección de intentos de jailbreak por rol, y fortalecer la defensa asumiendo ataques a velocidad de máquina.",
+  src:[["Anthropic (informe)","https://assets.anthropic.com/m/ec212e6566a0d47/original/Disrupting-the-first-reported-AI-orchestrated-cyber-espionage-campaign.pdf"],["The Register","https://www.theregister.com/2025/11/13/chinese_spies_claude_attacks/"],["MITRE ATT&CK C0062","https://attack.mitre.org/campaigns/C0062/"]] },
+
+{ date:"2025-10", cat:"supply", sev:"critical",
+  title:"F5: actor estatal roba código fuente de BIG-IP y vulnerabilidades sin parchear",
+  sum:"F5 reveló el 15-oct-2025 que un actor de nación-estado mantuvo acceso persistente (detectado en agosto) y exfiltró parte del código fuente de BIG-IP e información de fallas no divulgadas.",
+  det:"CISA emitió la Emergency Directive ED 26-01: inventariar BIG-IP, asegurar interfaces de gestión y parchear antes del 22-oct. F5 publicó una guía de caza para BRICKSTORM, malware asociado a actores chinos. El robo facilita el desarrollo de exploits y el descubrimiento de nuevos zero-days.",
+  les:"Aplicar parches de inmediato, no exponer interfaces de gestión a Internet, retirar dispositivos sin soporte y proteger entornos de desarrollo y repositorios de código como activos críticos.",
+  src:[["Axios","https://axios.com/2025/10/15/f5-nation-state-cyberattack-warning"],["The Hacker News","https://thehackernews.com/2025/10/f5-breach-exposes-big-ip-source-code.html"]] },
+
+{ date:"2025-10", cat:"zeroday", sev:"critical",
+  title:"Oracle E-Business Suite: zero-day CVE-2025-61882 y extorsión de Cl0p",
+  sum:"Cl0p explotó un zero-day en Oracle EBS (explotación desde ~9-ago-2025) y lanzó una oleada de extorsiones por robo de datos a inicios de octubre.",
+  det:"CVE-2025-61882 permite ejecución remota sin autenticación; se encadenó con fallas previas parcheadas en julio. Patrón típico de Cl0p: explotación masiva silenciosa, meses de permanencia y extorsión basada en datos robados, sin cifrar.",
+  les:"Aplicar los parches de Oracle y revisar indicadores de compromiso retroactivos, restringir exposición de EBS a Internet, segmentar ERPs y planificar respuesta a extorsión por filtración de datos.",
+  src:[["SOCRadar","https://socradar.io/blog/top-10-supply-chain-attacks-2025/"],["Silobreaker","https://www.silobreaker.com/blog/cyber-threats/supply-chain-attacks-in-2025-a-month-by-month-summary/"]] },
+
+{ date:"2025-09", cat:"ransomware", sev:"critical",
+  title:"Jaguar Land Rover: el ciberataque más costoso de la historia del Reino Unido",
+  sum:"El ataque iniciado el 31-ago-2025 paralizó la producción de JLR durante cerca de seis semanas y afectó a cientos de proveedores. El Cyber Monitoring Centre estimó un costo de £1.900 M.",
+  det:"JLR confirmó robo de datos. Un reporte del New York Times (2026) atribuye el ataque a hackers rusos. La interconexión de IT/producción y proveedores amplificó el impacto sobre la economía británica.",
+  les:"Segmentar IT de operación y producción, planear modos degradados de operación, practicar recuperación a gran escala y reforzar la cadena de proveedores con respaldo financiero y técnico.",
+  src:[["TechRadar","https://www.techradar.com/pro/security/jaguar-land-rover-cyberattack-could-be-the-costliest-in-uk-history"],["The Next Web","https://thenextweb.com/news/jaguar-land-rover-hack-russian-hackers-nyt-investigation"],["Computer Weekly","https://www.computerweekly.com/news/366630592/Jaguar-Land-Rover-admits-data-has-been-compromised-in-cyber-attack"]] },
+
+{ date:"2025-09", cat:"supply", sev:"critical",
+  title:"Shai-Hulud: el primer gusano autopropagable del ecosistema npm",
+  sum:"Desde el 15-sep-2025 un phishing que imitaba alertas de npm comprometió a mantenedores e infectó cientos de paquetes (cerca de 500 identificados al 16-sep). En noviembre resurgió como Shai-Hulud 2.0.",
+  det:"El malware roba tokens y secretos (incluye TruffleHog), crea repos públicos con lo exfiltrado e inyecta workflows de GitHub Actions para propagarse. La versión 2.0 se ejecuta en preinstall, afectó a más de 25.000 repos maliciosos en ~350 usuarios y puede borrar el directorio home si falla la exfiltración.",
+  les:"Exigir MFA resistente a phishing en npm/GitHub, deshabilitar scripts de instalación cuando sea posible, auditar dependencias, fijar versiones y rotar de inmediato todos los secretos de máquinas de desarrollo y CI.",
+  src:[["Unit 42","https://unit42.paloaltonetworks.com/npm-supply-chain-attack/"],["Trend Micro","https://www.trendmicro.com/en_us/research/25/i/npm-supply-chain-attack.html"]] },
+
+{ date:"2025-08", cat:"supply", sev:"high",
+  title:"Salesloft Drift: robo de tokens OAuth y datos de Salesforce de cientos de clientes",
+  sum:"Atacantes usaron tokens robados de la integración Drift para exfiltrar datos de instancias de Salesforce. Entre las víctimas confirmadas figuran Cloudflare, Zscaler y Palo Alto Networks; Salesloft sacó Drift temporalmente de línea.",
+  det:"Google advirtió que el alcance iba más allá de Salesforce y recomendó tratar todos los tokens de Drift como comprometidos. Muestra cómo el abuso de identidades y OAuth convierte integraciones de confianza en rutas de ataque sistémicas.",
+  les:"Inventariar y limitar integraciones SaaS (scopes mínimos), rotar tokens, vigilar actividad inusual de API y no almacenar secretos en campos de CRM o tickets de soporte.",
+  src:[["Kaseya","https://www.kaseya.com/blog/the-week-in-breach-news-09-10-25/"],["S-RM","https://www.s-rminform.com/cyber-intelligence-briefing/cyber-attack-halts-jaguar-land-rover-operation-cyber-intelligence-briefing-5-september-2025"]] },
+
+{ date:"2025-07", cat:"zeroday", sev:"critical",
+  title:"ToolShell: zero-day de SharePoint (CVE-2025-53770) explotado masivamente",
+  sum:"Desde el 17–18-jul-2025 se explotó a escala una cadena de fallas en SharePoint Server on-premises. Microsoft publicó guía el 19-jul y CISA añadió la CVE a KEV el 20-jul (CVSS 9.8).",
+  det:"ToolShell encadena CVE-2025-49704/49706 (demostradas en Pwn2Own Berlín) con las variantes 53770/53771. Permite RCE sin autenticación y evadir MFA/SSO; se robaron claves de máquina. Se observaron despliegues de ransomware (Warlock, 4L4MD4R). SharePoint Online no fue afectado.",
+  les:"Parchear SharePoint on-prem de inmediato, rotar claves de ASP.NET (machineKey), reiniciar IIS, activar AMSI y EDR, y reducir la exposición a Internet de servidores de colaboración.",
+  src:[["CISA","https://www.cisa.gov/news-events/alerts/2025/07/20/microsoft-releases-guidance-exploitation-sharepoint-vulnerability-CVE-2025-53770"],["Unit 42","https://unit42.paloaltonetworks.com/microsoft-sharepoint-cve-2025-49704-cve-2025-49706-cve-2025-53770/"]] },
+
+{ date:"2025-07", cat:"ransomware", sev:"high",
+  title:"Ingram Micro: ransomware paraliza al mayor distribuidor de TI",
+  sum:"A inicios de julio de 2025 un ataque de ransomware (reivindicado por SafePay) provocó una caída global de varios días en las plataformas de distribución de Ingram Micro.",
+  det:"La empresa restauró operaciones hacia el 10-jul, pero revendedores y socios que dependen de su cadena de suministro sufrieron interrupciones en pedidos y licencias.",
+  les:"Diseñar continuidad para sistemas de pedidos y licenciamiento, segmentar redes, proteger accesos VPN/identidad y mantener planes de comunicación con socios.",
+  src:[["Hornetsecurity","https://www.hornetsecurity.com/en/blog/cybersecurity-incidents/"],["SOCRadar","https://socradar.io/blog/top-10-supply-chain-attacks-2025/"]] },
+
+{ date:"2025-04", cat:"ransomware", sev:"high",
+  title:"M&S y Co-op: Scattered Spider con DragonForce golpea al retail británico",
+  sum:"M&S reveló el 22-abr-2025 un incidente que interrumpió pagos sin contacto y compras online durante meses. Se atribuyó a Scattered Spider usando el ransomware DragonForce; el Co-op fue atacado semanas después.",
+  det:"M&S estimó un impacto de ~£300 M en el beneficio operativo; su beneficio del primer semestre cayó de £391,9 M a £3,4 M. El Cyber Monitoring Centre trató M&S y Co-op como un único evento (hasta £440 M). El acceso inicial fue por ingeniería social.",
+  les:"Endurecer los procesos de help desk (verificación de identidad, restablecimiento de MFA), MFA resistente a phishing, segmentación de entornos virtuales y ensayo de recuperación de operaciones comerciales.",
+  src:[["The Record","https://therecord.media/marks-spencer-profits-wiped-out-cyberattack"],["The Register","https://www.theregister.com/2025/05/21/ms_cyberattack_disruption/"],["TechRadar","https://www.techradar.com/pro/security/m-and-s-and-co-op-hacks-publicly-defined-as-a-single-attack-and-could-cost-more-than-gbp400-million"]] },
+
+{ date:"2025-02", cat:"finance", sev:"critical",
+  title:"Bybit: US$1.500 M robados a través de una cadena de suministro de wallets",
+  sum:"El 21-feb-2025 Lazarus (TraderTraitor, Corea del Norte, según el FBI) drenó ~US$1.500 M en ETH de la cold wallet de Bybit durante una transferencia rutinaria.",
+  det:"Comprometieron la máquina de un desarrollador de Safe{Wallet} y modificaron JavaScript alojado en su AWS S3 para mostrar una transacción legítima mientras se firmaba una maliciosa; el código se borró minutos después. Fue el mayor robo cripto hasta octubre de 2026.",
+  les:"Verificar transacciones fuera de banda y con simulación previa a la firma, proteger los entornos de desarrollo de proveedores críticos y usar controles de integridad sobre código de frontends de custodia.",
+  src:[["TechTarget","https://www.techtarget.com/cybersecurity/news/366619872/FBI-Lazarus-Group-behind-15-billion-Bybit-heist"],["SecurityWeek","https://www.securityweek.com/fbi-says-north-korea-hacked-bybit-as-details-of-1-5b-heist-emerge/"]] }
+];
+
+/* ---------- utilidades ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+function h(tag, attrs, ...kids){
+  const el = document.createElement(tag);
+  for (const [k,v] of Object.entries(attrs||{})){
+    if (k==="class") el.className=v; else if (k==="text") el.textContent=v;
+    else if (v===true) el.setAttribute(k,""); else if (v!==false && v!=null) el.setAttribute(k,v);
+  }
+  for (const c of kids.flat()) if (c!=null) el.append(c.nodeType ? c : document.createTextNode(c));
+  return el;
+}
+const fmtDate = d => { const [y,m]=d.split("-"); return MONTHS[+m-1]+" "+y; };
+const chevron = () => { const s=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  s.setAttribute("class","chev"); s.setAttribute("width","18"); s.setAttribute("height","18"); s.setAttribute("viewBox","0 0 24 24");
+  s.setAttribute("fill","none"); s.setAttribute("stroke","currentColor"); s.setAttribute("stroke-width","2.5"); s.setAttribute("stroke-linecap","round"); s.setAttribute("aria-hidden","true");
+  const p=document.createElementNS("http://www.w3.org/2000/svg","path"); p.setAttribute("d","m6 9 6 6 6-6"); s.append(p); return s; };
+
+EVENTS.forEach((e,i)=>{ e.i=i; e.year=e.date.slice(0,4); e.hay=norm([e.title,e.sum,e.det,e.les,CATS[e.cat],SEV[e.sev],e.date,fmtDate(e.date)].join(" ")); });
+
+/* ---------- estado ---------- */
+const S = { cat:"all", sev:"all", year:"all", q:"", order:"desc", allOpen:false };
+const open = new Set();
+
+/* ---------- controles ---------- */
+function chipGroup(rowId, items, key, extra){
+  const row = $(rowId);
+  items.forEach(([val,label])=>{
+    const b = h("button",{class:"chip"+(extra?" s-"+val:""),type:"button","data-v":val,"aria-pressed":val==="all"?"true":"false",text:label});
+    b.addEventListener("click",()=>{ S[key]=val; row.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",String(c===b))); render(); });
+    row.insertBefore(b, row.querySelector(".spacer"));
+  });
+}
+chipGroup("#catRow",[["all","Todas"],...Object.entries(CATS)],"cat");
+chipGroup("#sevRow",[["all","Todas"],["critical","Critical"],["high","High"],["medium","Medium"]],"sev",true);
+chipGroup("#yearRow",[["all","2025–2026"],["2026","2026"],["2025","2025"]],"year");
+
+let t; $("#q").addEventListener("input",e=>{ clearTimeout(t); t=setTimeout(()=>{ S.q=norm(e.target.value.trim()); render(); },120); });
+const orderBtn=$("#orderBtn");
+function orderLabel(){ orderBtn.textContent = S.order==="desc" ? "↓ Más reciente primero" : "↑ Más antiguo primero"; }
+orderBtn.addEventListener("click",()=>{ S.order = S.order==="desc"?"asc":"desc"; orderLabel(); render(); });
+orderLabel();
+$("#expandBtn").addEventListener("click",e=>{
+  S.allOpen=!S.allOpen; if(!S.allOpen) open.clear();
+  e.target.textContent = S.allOpen ? "Contraer todo" : "Expandir todo"; render();
+});
+
+/* ---------- estadísticas ---------- */
+(function stats(){
+  const box=$("#stats");
+  const data=[["Eventos",EVENTS.length,""],["Critical",EVENTS.filter(e=>e.sev==="critical").length,"crit"],
+    ["2026",EVENTS.filter(e=>e.year==="2026").length,""],["2025",EVENTS.filter(e=>e.year==="2025").length,""]];
+  data.forEach(([l,n,c])=>box.append(h("div",{class:"stat "+c},h("b",{text:String(n)}),h("small",{text:l}))));
+})();
+
+/* ---------- tarjeta ---------- */
+function card(e){
+  const isOpen = S.allOpen || open.has(e.i);
+  const id = "ev"+e.i;
+  const btn = h("button",{class:"cardbtn",type:"button","aria-expanded":String(isOpen),"aria-controls":id},
+    h("h2",{class:"t",text:e.title}), chevron());
+  const more = h("div",{class:"more",id,hidden:!isOpen},
+    h("div",{class:"blk"},h("h3",{text:"// Detalle técnico / actores"}),h("p",{text:e.det})),
+    h("div",{class:"blk les"},h("h3",{text:"// Lección aprendida · mitigación"}),h("p",{text:e.les})),
+    h("div",{class:"blk"},h("h3",{text:"// Fuentes"}),
+      h("ul",{},e.src.filter(s=>/^https:\/\//.test(s[1])).map(s=>h("li",{},h("a",{href:s[1],target:"_blank",rel:"noopener noreferrer",text:s[0]})))))
+  );
+  btn.addEventListener("click",()=>{
+    const now = btn.getAttribute("aria-expanded")!=="true";
+    btn.setAttribute("aria-expanded",String(now)); more.hidden=!now;
+    now ? open.add(e.i) : open.delete(e.i);
+  });
+  return h("li",{class:"ev","data-sev":e.sev},
+    h("article",{class:"card"},
+      h("div",{class:"meta"},
+        h("time",{class:"date",datetime:e.date,text:fmtDate(e.date)}),
+        h("span",{class:"tag "+e.sev,text:SEV[e.sev]}),
+        h("span",{class:"tag cat",text:CATS[e.cat]})),
+      btn, h("p",{class:"sum",text:e.sum}), more));
+}
+
+/* ---------- render ---------- */
+function render(){
+  const desc = S.order==="desc";
+  const list = EVENTS.filter(e =>
+    (S.cat==="all"||e.cat===S.cat) && (S.sev==="all"||e.sev===S.sev) &&
+    (S.year==="all"||e.year===S.year) && (!S.q || S.q.split(/\s+/).every(w=>e.hay.includes(w)))
+  ).sort((a,b)=> a.date===b.date ? (desc ? a.i-b.i : b.i-a.i) : (desc ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date)));
+
+  const tl=$("#tl"); tl.replaceChildren();
+  $("#count").textContent = list.length+" de "+EVENTS.length+" eventos";
+  if(!list.length){ tl.append(h("li",{class:"empty",text:"> sin resultados · prueba otra palabra clave o limpia los filtros"})); return; }
+  let y=null;
+  list.forEach(e=>{ if(e.year!==y){ y=e.year; tl.append(h("li",{class:"year",text:y})); } tl.append(card(e)); });
+}
+render();
+</script>
+</body>
+</html>
